@@ -1,0 +1,44 @@
+﻿RECORDS ACCESS OFFICER
+Department of Information Technology & Telecommunications
+F.O.I.L. UNIT 
+
+
+Request ID:45655
+
+
+Dear Records Access Officer:
+This is a request under the Freedom of Information Act.
+I request that a copy of the following documents [or documents containing the following information] be provided to me:
+* The number of downloads and active downloads for the following smartphone apps 
+   * Android - NYC 311 - https://play.google.com/store/apps/details?id=gov.nyc.doitt.ThreeOneOne
+   * Android - NYC Buildings - https://play.google.com/store/apps/details?id=com.nyc.buildings
+   * Android - NYC Events - https://play.google.com/store/apps/details?id=com.nyc.buildings
+   * Android - Ready NYC - https://play.google.com/store/apps/details?id=gov.nyc.oem.readynyc
+   * iOS - NYC 311 - https://itunes.apple.com/us/app/nyc-311/id324897619?mt=8
+   * iOS - NYC Buildings - https://itunes.apple.com/us/app/nyc-buildings/id589095573?mt=8
+   * iOS - NYC Media App - https://itunes.apple.com/us/app/nyc-media-app/id433177943?mt=8
+   * iOS - Stuff Ex - https://itunes.apple.com/us/app/stuff-ex/id445438603?mt=8
+   * iOS - NYC Events - https://itunes.apple.com/us/app/nyc-events-etc./id690024902?mt=8
+   * iOS - Ready NYC - https://itunes.apple.com/us/app/ready-nyc/id633614907?mt=8
+   * iOS - NYCrecycles - https://itunes.apple.com/us/app/nycrecycles/id445457149?mt=8
+   * iOS - NYCService - https://itunes.apple.com/us/app/nycservice/id984030812?mt=8
+* The cost to develop, maintain, design and project manage the applications creations. 
+   * Are outside agencies or contractors involved, if so which are they and what has been paid to them.
+   * Did the process go to a RFP. Please provide the RFP document. 
+   * Are individual developers or managers employed by NYC working on these apps, if so what is their job description.
+
+
+In order to help to determine my status to assess fees, you should know that I am an individual seeking information for personal use and not for a commercial use.
+
+
+I request a waiver of all fees for this request. Disclosure of the requested information to me is in the public interest because it is likely to contribute significantly to public understanding of the operations or activities of the government and is not primarily in my commercial interest. 
+
+
+I ask that the data be provided in an Excel spreadsheet, csv or other delimited text file or other database format. If you have this information in an existing report, that may suffice.
+
+
+
+
+Thank you for your consideration of this request.
+Sincerely,
+ 
