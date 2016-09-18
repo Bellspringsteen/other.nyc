@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Where does my neighborhood NYPD live?</title>
+	<link rel="stylesheet" href="./resources/ol/ol.css" type="text/css">
+	<link rel="stylesheet" href="./resources/styles.css" type="text/css">
+	<link rel="stylesheet" href="./resources/bootstrap/css/bootstrap.min.css" type="text/css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js">
+	</script>
+	    <script src="http://libs.cartocdn.com/cartodb.js/v3/3.15/cartodb.core.js"></script>
+
+	<script src="./resources/bootstrap/js/bootstrap.min.js" type="text/javascript">
+	</script>
+	<script src="./resources/ol/ol.js">
+	</script>
+</head>
+<body>
+
+			<div style="height:100%; width:100%;" id="map" class="map">
+			<div id="precinctpopup" class="alert alert-info precinctpopup">
+			<p> precinct </p>
+			</div>
+			</div>
+<div style="display: none;">
+	<div id="marker" title="Marker">
+	</div>
+	<div id="zipPopup">
+	</div>
+</div>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-77383589-3', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+<script>
+	
+	var homeZipStyleCache = {};
+	var selectedPrecinct = "CENTRAL PARK PRECINCT"
+	$("#precinctpopup").html('<p>'+selectedPrecinct+ '</p> <p><div style="text-align:center;border:1px solid red"> 43.00% Officers Live in NYC </div><p><br> Officers Living Illegally in Same Zip '+3+'%<br> 14% live in Manhattan <br> 4% live in Brooklyn<br> 12% live in the Bronx<br> 13% live in Queens<br> 0% live in Staten Island<br> 17% live in Long Island<br> 25% live Upstate<br>'); 
+
+	var dictionaryOfOfficersPerZipByPrecinct={};
+  	$.getJSON('./resources/PrecinctToNumberOfficersInZip.json', function(data) { 
+    	dictionaryOfOfficersPerZipByPrecinct=data;
+  	}); 
+	
+	var feature = new ol.Feature(new ol.geom.Point(center));
+
+	var homeZipLayer = new ol.layer.Vector({
+	  source: new ol.source.Vector({
+	    url: './resources/homeZipGeoJsonOverlay.geojson',
+	    format: new ol.format.GeoJSON()
+	  }),
+	  style: function(feature, resolution) {
+	    var officersInZip = dictionaryOfOfficersPerZipByPrecinct[selectedPrecinct][feature.get('ZCTA5CE10')]
+	    var totalOfficersInZip = dictionaryOfOfficersPerZipByPrecinct[selectedPrecinct]['LargestNumber']
+	    var opacity = (officersInZip/totalOfficersInZip);
+	    if (!homeZipStyleCache[officersInZip]) {
+	      homeZipStyleCache[officersInZip] = new ol.style.Style({
+	        
+	        fill: new ol.style.Fill({
+	          color: 'rgba(0,0,255,'+opacity+')'
+	        }),
+	        text: new ol.style.Text({
+	          font: '12px Calibri,sans-serif',
+	          fill: new ol.style.Fill({
+	            color: '#000'
+	          }),
+	          stroke: new ol.style.Stroke({
+	            color: '#f00',
+	            width: 1
+	          })
+	        })
+	      });
+	    }
+	    return homeZipStyleCache[officersInZip];
+	  }
+	});
+	
+	function func(resolution) {
+		return Math.min(50/resolution,1.5);
+	
+	}
+	
+	function opacity(feature) {
+		if(feature.get('PRECINCTNAME')==selectedPrecinct){
+			return 1.0;
+		}else{
+			return .50;
+		}
+	}
+	
+	var iconStyle = new ol.style.Icon({
+	      anchorXUnits: 'fraction',
+	      anchorYUnits: 'pixels',
+	      opacity: 0.75,
+	      src: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAmCAYAAADTGStiAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2dpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDE0IDc5LjE1MTQ4MSwgMjAxMy8wMy8xMy0xMjowOToxNSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wUmlnaHRzPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvcmlnaHRzLyIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcFJpZ2h0czpNYXJrZWQ9IkZhbHNlIiB4bXA6Q3JlYXRvclRvb2w9IkFkb2JlIFBob3Rvc2hvcCA3LjAiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MTk2MkZENzM2RkY0MTFFNjg3N0RCRkI2QjRFMEQ1NzciIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MTk2MkZENzQ2RkY0MTFFNjg3N0RCRkI2QjRFMEQ1NzciPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDoxOTYyRkQ3MTZGRjQxMUU2ODc3REJGQjZCNEUwRDU3NyIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDoxOTYyRkQ3MjZGRjQxMUU2ODc3REJGQjZCNEUwRDU3NyIvPiA8L3JkZjpEZXNjcmlw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',
+	      rotation: 0
+	});
+	
+
+	
+	var styles = [new ol.style.Style({
+  		image: iconStyle
+	})];
+
+	
+	var precinctLayer = new ol.layer.Vector({
+	  source: new ol.source.Vector({
+	    url: './resources/precincts.geojson',
+	    format: new ol.format.GeoJSON()
+	  }),
+	  style: function(feature, resolution) {
+	    var scale = func(resolution);
+   		 iconStyle.setScale(scale);
+   		 var opacityValue = opacity(feature);
+   		 iconStyle.setOpacity(opacityValue);
+    	return styles;
+  	}
+	});
+	
+	  var center = ol.proj.transform([ -73.999109,40.728732], 'EPSG:4326', 'EPSG:3857');
+	
+	/*var googleLayer = new olgm.layer.Google();
+	
+	var osmLayer = new ol.layer.Tile({
+  		source: new ol.source.OSM(),
+  		visible: false
+	});*/
+
+
+
+
+
+
+	var map = new ol.Map({
+layers: [
+new ol.layer.Tile({
+  source: new ol.source.XYZ({
+    tileSize: [512, 512],
+    url: 'https://api.mapbox.com/styles/v1/mapbox/streets-v8/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYmVsbHNwcmluZ3N0ZWVuIiwiYSI6ImNpc3k4Ym9saDBjZmoyb2toOWhkZWJkdTcifQ.K1TCt13nFzgRvLawZ8hWxA'
+  })
+})
+,precinctLayer,homeZipLayer],
+target: 'map',
+view: new ol.View({
+center: center,
+zoom:12
+})
+});
+
+
+	precinctLayer.setZIndex(3);
+	homeZipLayer.setZIndex(0);
+		
+	
+	var rolloverHighlightZipStyle  =new ol.style.Style({
+	        stroke: new ol.style.Stroke({
+	          color: '#fff',
+	          width: 1
+	        }),
+	        fill: new ol.style.Fill({
+	          color: 'rgba(255,255,255,'+255+')'
+	        }),
+	        text: new ol.style.Text({
+	          font: '12px Calibri,sans-serif',
+	          fill: new ol.style.Fill({
+	            color: '#000'
+	          }),
+	          stroke: new ol.style.Stroke({
+	            color: '#f00',
+	            width: 1
+	          })
+	        })
+	      });
+	
+	var rolloverHighlightZipLayer = new ol.layer.Vector({
+	  source: new ol.source.Vector(),
+	  map: map,
+	  style: function(feature, resolution) {
+	      return rolloverHighlightZipStyle;
+	  }
+	});
+	
+	rolloverHighlightZipLayer.setZIndex(1)
+
+	var zipPopup = new ol.Overlay({
+	  element: document.getElementById('zipPopup')
+	});
+	map.addOverlay(zipPopup);
+	
+	/*var precinctPopup = new ol.Overlay({
+	  element: document.getElementById('precinctPopup')
+	});
+	map.addOverlay(precinctPopup);*/
+	
+	var highlight;
+	var displayRolloverZipHighlight = function(pixel,feature) {
+	
+	
+	  if (feature !== highlight) {
+	    if (highlight) {
+	      rolloverHighlightZipLayer.getSource().removeFeature(highlight);
+	    }
+	    if (feature) {
+	      rolloverHighlightZipLayer.getSource().addFeature(feature);
+	    }
+	    highlight = feature;
+	  }
+	
+	};
+	
+	map.on('pointermove', function(evt) {
+	  if (evt.dragging) {
+	    return;
+	  }
+	  var pixel = map.getEventPixel(evt.originalEvent);
+	  var feature = map.forEachFeatureAtPixel(pixel, function(feature) {
+	    return feature;
+	  });
+	  
+	  //displayRolloverZipHighlight(pixel,feature);
+	  
+	  var element = zipPopup.getElement();
+	  var coordinate = evt.coordinate;
+	  $(element).popover('destroy');
+	  zipPopup.setPosition(coordinate);
+	  $(element).popover({
+	    'placement': 'top',
+	    'animation': false,
+	    'html': true,
+	    content: function () {
+	  		if (feature!=null){
+	
+	 				return '<p><div style="text-align:center;">'+(dictionaryOfOfficersPerZipByPrecinct[selectedPrecinct][feature.get('ZCTA5CE10')] || 0 )+ ' officers who work in '+selectedPrecinct+' live in '+feature.get('ZCTA5CE10');
+	 			/*}else {
+	 				return '<p><div style="text-align:center;border:1px solid red">'+feature.get('OFFICERSFROMNYC')*100+ '% Live in NYC </div><p><br><br> Officers Living Illegally in Same Zip '+feature.get('OFFICERSSAMEZIP')*100+'%<br>' +feature.get('OFFICERSFROMMANHATTAN')*100+'% live in Manhattan <br>'+feature.get('OFFICERSFROMBROOKLYN')*100+'% live in Brooklyn<br>'+feature.get('OFFICERSFROMBRONX')*100+'% live in the Bronx<br>'+feature.get('OFFICERSFROMQUEENS')*100+'% live in Queens<br>'+feature.get('OFFICERSFROMSTATEN')*100+'% live in Staten Island<br>'+feature.get('OFFICERSFROMLONGISLAND')*100+'% live in Long Island<br>'+feature.get('OFFICERSFROMUPSTATE')*100+'% live Upstate<br>'; 
+	  			}*/
+	  		}
+	  	}
+	  });
+	  $(element).popover('show');      
+	
+	});
+	
+	map.on('click', function(evt) {
+		var pixel = map.getEventPixel(evt.originalEvent);
+		
+		var feature = map.forEachFeatureAtPixel(pixel, function(feature) {
+			return feature;
+		});
+		
+		if(!feature.get('OFFICERINZIP')){
+		
+		selectedPrecinct = feature.get('PRECINCTNAME')
+		
+		var coordinate = evt.coordinate;
+		//var containerLimitingSize = Math.min($("#precinctpopup").height(),$("#precinctpopup").width());
+		var pan = ol.animation.pan({
+        duration: 500,
+        source: /** @type {ol.Coordinate} */ (map.getView().getCenter())
+      	});
+      	map.beforeRender(pan);
+
+		map.getView().setCenter(coordinate);
+      //$('.precinctpopup').css("font-size", containerLimitingSize/16);
+	  $("#precinctpopup").html('<p>'+selectedPrecinct+ '</p> <p><div style="text-align:center;border:1px solid red">'+(feature.get('OFFICERSFROMNYC')*100).toFixed(0)+ '% Officers Live in NYC </div><p><br> Officers Living Illegally in Same Zip '+(feature.get('OFFICERSSAMEZIP')*100).toFixed(0)+'%<br>' +(feature.get('OFFICERSFROMMANHATTAN')*100).toFixed(0)+'% live in Manhattan <br>'+(feature.get('OFFICERSFROMBROOKLYN')*100).toFixed(0)+'% live in Brooklyn<br>'+(feature.get('OFFICERSFROMBRONX')*100).toFixed(0)+'% live in the Bronx<br>'+(feature.get('OFFICERSFROMQUEENS')*100).toFixed(0)+'% live in Queens<br>'+(feature.get('OFFICERSFROMSTATEN')*100).toFixed(0)+'% live in Staten Island<br>'+(feature.get('OFFICERSFROMLONGISLAND')*100).toFixed(0)+'% live in Long Island<br>'+(feature.get('OFFICERSFROMUPSTATE')*100).toFixed(0)+'% live Upstate<br>'); 
+
+	  		
+	  	
+	
+	
+		}
+		     
+	});
+	
+
+</script>
+</body>
+</html>
