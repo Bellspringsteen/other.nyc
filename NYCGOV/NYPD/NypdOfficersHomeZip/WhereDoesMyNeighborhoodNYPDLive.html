@@ -144,7 +144,7 @@ layers: [
 new ol.layer.Tile({
   source: new ol.source.XYZ({
     tileSize: [512, 512],
-    url: 'https://api.mapbox.com/styles/v1/mapbox/streets-v8/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYmVsbHNwcmluZ3N0ZWVuIiwiYSI6ImNpc3k4Ym9saDBjZmoyb2toOWhkZWJkdTcifQ.K1TCt13nFzgRvLawZ8hWxA'
+    url: 'https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYmVsbHNwcmluZ3N0ZWVuIiwiYSI6ImNpc3k4Ym9saDBjZmoyb2toOWhkZWJkdTcifQ.K1TCt13nFzgRvLawZ8hWxA'
   })
 })
 ,precinctLayer,homeZipLayer],
@@ -237,8 +237,9 @@ zoom:12
 	    'html': true,
 	    content: function () {
 	  		if (feature!=null){
-	
+				if(feature.get('OFFICERINZIP')){
 	 				return '<p><div style="text-align:center;">'+(dictionaryOfOfficersPerZipByPrecinct[selectedPrecinct][feature.get('ZCTA5CE10')] || 0 )+ ' officers who work in '+selectedPrecinct+' live in '+feature.get('ZCTA5CE10');
+	 				}
 	 			/*}else {
 	 				return '<p><div style="text-align:center;border:1px solid red">'+feature.get('OFFICERSFROMNYC')*100+ '% Live in NYC </div><p><br><br> Officers Living Illegally in Same Zip '+feature.get('OFFICERSSAMEZIP')*100+'%<br>' +feature.get('OFFICERSFROMMANHATTAN')*100+'% live in Manhattan <br>'+feature.get('OFFICERSFROMBROOKLYN')*100+'% live in Brooklyn<br>'+feature.get('OFFICERSFROMBRONX')*100+'% live in the Bronx<br>'+feature.get('OFFICERSFROMQUEENS')*100+'% live in Queens<br>'+feature.get('OFFICERSFROMSTATEN')*100+'% live in Staten Island<br>'+feature.get('OFFICERSFROMLONGISLAND')*100+'% live in Long Island<br>'+feature.get('OFFICERSFROMUPSTATE')*100+'% live Upstate<br>'; 
 	  			}*/

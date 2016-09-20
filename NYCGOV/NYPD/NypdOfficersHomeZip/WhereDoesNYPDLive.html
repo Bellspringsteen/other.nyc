@@ -84,8 +84,7 @@
 	  }
 	});
 		
-	var center = ol.proj.transform([ -73.999109,40.728732], 'EPSG:4326', 'EPSG:3857');
-	
+	var center = ol.proj.transform([ -73.821575,40.750380], 'EPSG:4326', 'EPSG:3857');
 	
 	
 	var map = new ol.Map({
@@ -93,14 +92,14 @@ layers: [
 new ol.layer.Tile({
   source: new ol.source.XYZ({
     tileSize: [512, 512],
-    url: 'https://api.mapbox.com/styles/v1/mapbox/streets-v8/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYmVsbHNwcmluZ3N0ZWVuIiwiYSI6ImNpc3k4Ym9saDBjZmoyb2toOWhkZWJkdTcifQ.K1TCt13nFzgRvLawZ8hWxA'
+    url: 'https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYmVsbHNwcmluZ3N0ZWVuIiwiYSI6ImNpc3k4Ym9saDBjZmoyb2toOWhkZWJkdTcifQ.K1TCt13nFzgRvLawZ8hWxA'
   })
 })
 ,homeZipLayer],
 target: 'map',
 view: new ol.View({
 center: center,
-zoom:11
+zoom:10
 })
 });
 	

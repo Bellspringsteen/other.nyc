@@ -66,6 +66,7 @@ def processFOILData():
 		totalNumberWhoLiveInUpstateNy = 0
 		totalNumberWhoLiveInSameZip= 0
 		totalNumberWhoDontLiveInSameZip= 0
+		totalNumberWhoDontLiveWhereTheyShould= 0
 
 		for row in csvreader:
 			if (numberOfRows==0):
@@ -81,7 +82,8 @@ def processFOILData():
 				numberWhoLiveInUpstateNy = 0
 				numberWhoLiveInSameZip= 0
 				numberWhoDontLiveInSameZip = 0
-				
+				numberWhoDontLiveWhereTheyShould = 0
+
 				precinctLat = 0.0
 				precinctLng = 0.0
 				numberOfOfficersInPrecinct = 0
@@ -150,6 +152,11 @@ def processFOILData():
 							numberWhoLiveInLongIsland += int(zipCodeNumOfficersInLocation)
 						elif ((getCounty(zipCodeOfficerLocation)=="Westchester County")|(getCounty(zipCodeOfficerLocation)=="Putnam County")|(getCounty(zipCodeOfficerLocation)=="Orange County")|(getCounty(zipCodeOfficerLocation)=="Rockland County")):
 							numberWhoLiveInUpstateNy += int(zipCodeNumOfficersInLocation)
+						else:
+							numberWhoDontLiveWhereTheyShould += int(zipCodeNumOfficersInLocation)
+							if (zipCodeNumOfficersInLocation>0):
+								print("Zip Code"+str(zipCodeOfficerLocation)+" and number"+str(zipCodeNumOfficersInLocation)+" and county"+getCounty(zipCodeOfficerLocation))
+														
 						numberWhoDontLiveInSameZip += int(zipCodeNumOfficersInLocation)
 					else:
 						numberWhoLiveInSameZip += int(zipCodeNumOfficersInLocation)
@@ -165,6 +172,7 @@ def processFOILData():
 				totalNumberWhoLiveInUpstateNy += numberWhoLiveInUpstateNy
 				totalNumberWhoLiveInSameZip += numberWhoLiveInSameZip
 				totalNumberWhoDontLiveInSameZip += numberWhoDontLiveInSameZip
+				totalNumberWhoDontLiveWhereTheyShould += numberWhoDontLiveWhereTheyShould
 				
 				jsonOfHomeZipWithOfficersPerPrecinct["LargestNumber"] = largestNumberOfOfficersInOneZip
 				outputJsonPrecinctToZipNumber[row[0]] = jsonOfHomeZipWithOfficersPerPrecinct
@@ -182,7 +190,8 @@ def processFOILData():
 		print(str(100*round(totalNumberWhoLiveInLongIsland/22218.0,2))+"% of NYPD Officers Live in Long Island")
 		print(str(100*round(totalNumberWhoLiveInUpstateNy/22218.0,2))+"% of NYPD Officers Live in Upstate NY")
 		print(str(100*round(totalNumberWhoLiveInSameZip/22218.0,2))+"% of NYPD Officers Live in the Same Zip they Serve ")
-			
+		print(str(100*round(totalNumberWhoDontLiveWhereTheyShould/22218.0,2))+"% of NYPD Officers Who Dont Live Where they should ")
+
 			
 		
 		with open("./usZipShapes.geojson") as json_file:
@@ -191,7 +200,7 @@ def processFOILData():
 				if (i['properties'])['ZCTA5CE10'] in dictionaryOfZips:
 					if (i['properties'])['ZCTA5CE10'] in numberWhoWorkInMN:
 						i['properties']["OFFICERINZIP"]= int(numberWhoWorkInMN[i['properties']['ZCTA5CE10']])+int(numberWhoWorkInQN[i['properties']['ZCTA5CE10']])+int(numberWhoWorkInST[i['properties']['ZCTA5CE10']])+int(numberWhoWorkInBRNX[i['properties']['ZCTA5CE10']])+int(numberWhoWorkInBKLYN[i['properties']['ZCTA5CE10']])
-						print("Officers in Zip "+str(i['properties']['ZCTA5CE10'] )+" equals "+str(i['properties']["OFFICERINZIP"]))
+						#print("Officers in Zip "+str(i['properties']['ZCTA5CE10'] )+" equals "+str(i['properties']["OFFICERINZIP"]))
 						i['properties']["OFFICERINMANHATTAN"]= numberWhoWorkInMN[i['properties']['ZCTA5CE10']]
 						i['properties']["OFFICERINBRONX"]= numberWhoWorkInBRNX[i['properties']['ZCTA5CE10']]
 						i['properties']["OFFICERINBROOKLYN"]= numberWhoWorkInBKLYN[i['properties']['ZCTA5CE10']]

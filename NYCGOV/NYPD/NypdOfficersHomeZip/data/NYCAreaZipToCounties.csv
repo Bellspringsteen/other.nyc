@@ -1,3 +1,4 @@
+zip,county
 07631,Bergen County
 07652,Bergen County
 07728,Monmouth County
@@ -56,10 +57,10 @@
 10310,Richmond County
 10312,Richmond County
 10314,Richmond County
-10451,
+10451,Bronx County
 10452,Bronx County
-10453,
-10454,
+10453,Bronx County
+10454,Bronx County
 10455,Bronx County
 10456,Bronx County
 10457,Bronx County
@@ -68,14 +69,14 @@
 10460,Bronx County
 10461,Bronx County
 10462,Bronx County
-10463,
+10463,Bronx County
 10464,Bronx County
 10465,Bronx County
 10466,Bronx County
 10467,Bronx County
-10468,
+10468,Bronx County
 10469,Bronx County
-10470,
+10470,Bronx County
 10471,Bronx County
 10472,Bronx County
 10473,Bronx County
@@ -83,7 +84,7 @@
 10475,Bronx County
 10501,Westchester County
 10502,Westchester County
-10505,
+10505,Westchester County
 10506,Westchester County
 10507,Westchester County
 10509,Putnam County
@@ -97,17 +98,17 @@
 10520,Westchester County
 10522,Westchester County
 10523,Westchester County
-10524,
+10524,Putnam County
 10528,Westchester County
 10530,Westchester County
 10532,Westchester County
 10533,Westchester County
 10535,Westchester County
 10536,Westchester County
-10537,
+10537,Putnam County
 10538,Westchester County
 10540,Westchester County
-10541,
+10541,Putnam County
 10542,Putnam County
 10543,Westchester County
 10547,Westchester County
@@ -125,7 +126,7 @@
 10579,Putnam County
 10580,Westchester County
 10583,Westchester County
-10588,
+10588,Westchester County
 10589,Westchester County
 10590,Westchester County
 10591,Westchester County
@@ -142,7 +143,7 @@
 10701,Westchester County
 10703,Westchester County
 10704,Westchester County
-10705,
+10705,Westchester County
 10706,Westchester County
 10707,Westchester County
 10708,Westchester County
@@ -171,7 +172,7 @@
 10930,Orange County
 10931,Rockland County
 10933,Orange County
-10940,
+10940,Orange County
 10941,Orange County
 10950,Orange County
 10952,Rockland County
@@ -191,12 +192,12 @@
 10974,Rockland County
 10976,Rockland County
 10977,Rockland County
-10980,
+10980,Rockland County
 10981,Orange County
 10983,Rockland County
 10984,Rockland County
-10986,
-10987,
+10986,Rockland County
+10987,Orange County
 10988,Orange County
 10989,Rockland County
 10990,Orange County
@@ -204,8 +205,8 @@
 10993,Rockland County
 10994,Rockland County
 10998,Orange County
-11001,
-11003,
+11001,Nassau County
+11003,Nassau County
 11004,Queens County
 11010,Nassau County
 11020,Nassau County
@@ -214,27 +215,27 @@
 11024,Nassau County
 11026,Nassau County
 11030,Nassau County
-11040,
+11040,Nassau County
 11050,Nassau County
-11096,
-11101,
-11102,
+11096,Nassau County
+11101,Queens County
+11102,Queens County
 11103,Queens County
 11104,Queens County
-11105,
+11105,Queens County
 11106,Queens County
 11109,Queens County
-11201,
+11201,Kings County
 11202,Kings County
 11203,Kings County
 11204,Kings County
 11205,Kings County
 11206,Kings County
-11207,
-11208,
+11207,Kings County
+11208,Kings County
 11209,Kings County
 11210,Kings County
-11211,
+11211,Kings County
 11212,Kings County
 11213,Kings County
 11214,Kings County
@@ -245,7 +246,7 @@
 11219,Kings County
 11220,Kings County
 11221,Kings County
-11222,
+11222,Kings County
 11223,Kings County
 11224,Kings County
 11225,Kings County
@@ -253,7 +254,7 @@
 11228,Kings County
 11229,Kings County
 11230,Kings County
-11231,
+11231,Kings County
 11232,Kings County
 11233,Kings County
 11234,Kings County
@@ -262,7 +263,7 @@
 11237,Kings County
 11238,Kings County
 11239,Kings County
-11249,
+11249,Kings County
 11354,Queens County
 11355,Queens County
 11356,Queens County
@@ -271,7 +272,7 @@
 11360,Queens County
 11361,Queens County
 11362,Queens County
-11363,
+11363,Queens County
 11364,Queens County
 11365,Queens County
 11366,Queens County
@@ -290,7 +291,7 @@
 11411,Queens County
 11412,Queens County
 11413,Queens County
-11414,
+11414,Queens County
 11415,Queens County
 11416,Queens County
 11417,Queens County
@@ -298,12 +299,12 @@
 11419,Queens County
 11420,Queens County
 11421,Queens County
-11422,
+11422,Queens County
 11423,Queens County
 11426,Queens County
 11427,Queens County
 11428,Queens County
-11429,
+11429,Queens County
 11432,Queens County
 11433,Queens County
 11434,Queens County
@@ -343,17 +344,17 @@
 11579,Nassau County
 11580,Nassau County
 11581,Nassau County
-11587,
+11587,Nassau County
 11590,Nassau County
 11596,Nassau County
 11598,Nassau County
 11691,Queens County
 11692,Queens County
-11693,
-11694,
+11693,Queens County
+11694,Queens County
 11697,Queens County
 11701,Suffolk County
-11702,
+11702,Nassau County
 11703,Suffolk County
 11704,Suffolk County
 11705,Suffolk County
@@ -378,7 +379,7 @@
 11731,Suffolk County
 11732,Nassau County
 11733,Suffolk County
-11735,
+11735,Nassau County
 11738,Suffolk County
 11739,Suffolk County
 11740,Suffolk County
@@ -451,23 +452,23 @@
 12253,
 12518,Orange County
 12520,Orange County
-12531,
-12533,
-12542,
+12531,Dutchess County
+12533,Dutchess County
+12542,Ulster County
 12543,Orange County
 12549,Orange County
 12550,Orange County
 12553,Orange County
 12563,Putnam County
-12566,
+12566,Orange County
 12575,Orange County
 12577,Orange County
 12582,Dutchess County
 12586,Orange County
-12589,
-12721,
-12729,
+12589,Ulster County
+12721,Sullivan County
+12729,Orange County
 12746,Orange County
 12771,Orange County
-12780,
-18302,
+12780,Orange County
+18302,Monroe County
