@@ -6,8 +6,10 @@ New York, NY 10041
 Dear Records Access Officer:
 This is a request under the Freedom of Information Act.
 I request that a copy of the following documents [or documents containing the following information] be provided to me:
-A list of the number of FOIL received by the DOT that are currently pending.
-A list of the FOIL Requests received by the DOT over the last 3 years with dates
+A document detailing the additional cost, over a no bicycle infrastructure street associated, with the construction of a unit (whatever the easiest unit is such as per block, per foot, etc) of a “Protected Bicycle Path with Access Point“  such as can be found on Columbus Avenue and 92nd Street.
+A document detailing the cost associated, over a no bicycle infrastructure street associated, with the construction of a unit (whatever the easiest unit is such as per block, per foot, etc) of a “Bicycle Lane” such as can be found on 111th street and Adam Clayton Powell Jr Blvd.
+Any documents detailing the proposal, construction, cost, or any other details of the installation of the “Protected Bicycle Path with Access Point“ which stretches from 110th to 69th street on Columbus Avenue in Manhattan.
+Any documents detailing the proposal, construction, cost, or any other details of the installation of the “Bicycle Lane“ which stretches from 110th to 118thth street on Adam Clayton Powell Jr Blvd in Manhattan.
 
 In order to help to determine my status to assess fees, you should know that I am an individual seeking information for personal use and not for a commercial use.
 
