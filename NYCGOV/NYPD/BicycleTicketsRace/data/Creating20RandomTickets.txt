@@ -1,0 +1,54 @@
+﻿1. Took File and saw 51842 rows.
+2. randomTicketNumber.py
+import random
+
+
+for x in range(0, 20):
+        randomnumber = random.randrange(0, 51842);
+        print randomnumber
+
+
+   1.    1. 25921
+   2. 25713
+   3. 13942
+   4. 51620
+   5. 32559
+   6. 34155
+   7. 19125
+   8. 21273
+   9. 27588
+   10. 16498
+   11. 50920
+   12. 19024
+   13. 40347
+   14. 31437
+   15. 30257
+   16. 44385
+   17. 40637
+   18. 35912
+   19. 32527
+   20. 35991
+   1. These numbers equal tickets
+
+
+AAR2837133
+	AAT6911542
+	AAS4168496
+	AAW2977111
+	AAW0914082
+	AAX9282464
+	AAW0754670
+	AAX6367561
+	AAT6194731
+	AAW3094523
+	AAW8650294
+	AAW6272630
+	AAY5411243
+	AAT6550714
+	AAY6625430
+	AAR3157383
+	AAW8822424
+	AAX9354096
+	AAX3666806
+	AAT0405451
+	      1.
