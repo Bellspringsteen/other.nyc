@@ -1,0 +1,187 @@
+body{
+	font-family: 'Source Sans Pro', sans-serif;
+	font-weight:600;
+	margin: 0px;
+	width: 100%;
+}
+
+#home{
+	background-color: rgb(53, 28, 21);
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center center;
+	height: 198px;
+	width: 100%
+}
+#hometext{
+	width: 770px;
+	text-align: center;
+	margin: auto;
+	position: relative;
+	top: 50px;
+	font-size: 4.643em;
+	color: rgb(255, 255, 255);
+}
+
+#about{
+	width: 100%;
+	height: 150px;
+	text-align: center;
+	background-color: rgb(255, 255, 255);
+}
+
+#abouttext{
+	color: rgb(53, 28, 21);
+	font-size: 45px;
+	line-height: 1.38;
+	text-align: center;
+	width: 50%;
+	margin: auto;
+	position: relative;
+	top: 20px;
+}
+
+#features{
+	width: 100%;
+	text-align:center;
+	height: 610px;
+}
+
+#featuretext{
+	font-size: 2.429em;
+	margin: auto;
+	padding-top: 57px; 
+	padding-bottom: 15px;
+
+}
+/*
+.slideshow { 
+	position: relative;
+	left:40px; 
+	overflow: auto; 
+	width: 100%;
+	height:900px;
+	margin: auto;
+	padding-top: 30px;
+}*/
+.slideshow { 
+	position: relative;
+	overflow: auto; 
+	width: 33%;
+	float: left;
+	height:600px;
+	margin: auto;
+	padding-left:5%;
+	padding-right:5%;
+	padding-top: 30px;
+}
+
+.slideshowimage { 
+	height: 350px;
+}
+
+.slideshow li { 
+	list-style: none; 
+}
+.slideshow ul li { 
+	float: left; 
+}
+
+#slideshowheadlinetext{
+	color: rgb(53, 28, 21);
+	font-size: 25px;
+	line-height: 1.38;
+	text-align: left;
+	width: 75%;
+	margin: auto;
+	position: relative;
+	top: 0px;
+}
+
+#slideshowtext{
+	color: rgb(53, 28, 21);
+	font-size: 15px;
+	line-height: 1.38;
+	text-align: left;
+	width: 75%;
+	margin: auto;
+	position: relative;
+	top: 0px;
+}
+
+#classaction{
+	width: 100%;
+	text-align:center;
+	height: 450px;
+	border-bottom: solid 3px rgb(53, 28, 21);
+
+}
+
+#classactionblock{
+	line-height: 1.38;
+	text-align: left;
+	width: 50%;
+	margin: auto;
+	position: relative;
+	left: 5%;
+	top: 25px;
+}
+
+#classactionheadlinetext{
+	font-size: 40px;
+	margin: auto;
+	color:rgb(255,255,255);
+	background-color: rgb(255,0,0);
+}
+
+#classactiontext{
+	color: rgb(53, 28, 21);
+	font-size: 25px;
+	line-height: 1.38;
+	text-align: left;
+	margin: auto;
+	position: relative;
+	top: 0px;
+}
+
+#classactiontextheader{
+	color: rgb(53, 28, 21);
+	font-size: 35px;
+	line-height: 1.38;
+	text-align: left;
+	margin: auto;
+	position: relative;
+	top: 0px;
+}
+
+#classactionpic{
+	line-height: 1.38;
+	text-align: left;
+	width: 25%;
+	margin: auto;
+	position: relative;
+	float: left;
+	left:10%;
+	top: 25px;
+}
+
+#takeaction{
+	margin: auto;
+	display:block;
+	position: relative;
+	text-align:center;
+	height: 200px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
