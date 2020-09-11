@@ -120,7 +120,7 @@ def processFOILData():
 								elif (getCounty(zipWorkLocation)=="Kings County"):
 									numberWhoWorkInBKLYN[zipHomeLocation]= numberWhoWorkInBKLYN.get(zipHomeLocation,0)+int(row[columnId])
 								elif (getCounty(zipWorkLocation)=="Queens County"):
-									numberWhoWorkInBKLYN[zipHomeLocation]= numberWhoWorkInQN.get(zipHomeLocation,0)+int(row[columnId])
+									numberWhoWorkInQN[zipHomeLocation]= numberWhoWorkInQN.get(zipHomeLocation,0)+int(row[columnId])
 								elif (getCounty(zipWorkLocation)=="Richmond County"):
 									numberWhoWorkInST[zipHomeLocation]= numberWhoWorkInST.get(zipHomeLocation,0)+int(row[columnId])
 									
