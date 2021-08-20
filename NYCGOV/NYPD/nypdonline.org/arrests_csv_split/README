@@ -1,0 +1,4 @@
+split -d -l 100000 arrests_sorted.csv arrests.part
+
+cat arrests.part* > combined.csv
+
