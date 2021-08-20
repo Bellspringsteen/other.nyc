@@ -20,7 +20,6 @@ OFFICER_URL = 'https://oip.nypdonline.org/api/reports/1/datasource/list'
 SAVE_DICTIONARY = './data-folders/'
 TMP_DIRECTORY = './tmp/'
 SAVE_TAX_ID_LIST = 'tax_id_list'
-
 LIST_OF_FILTERS = [2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,2041,2042]
 
 def append_to_tax_id_dict(value_to_append):
@@ -112,7 +111,6 @@ def load_tax_ids_from_file():
     with open(SAVE_TAX_ID_LIST, 'r') as filehandle:
          return json.load(filehandle)
 
-<<<<<<< HEAD
 def get_folders_in_path(path_to_search):
     return os.listdir(path_to_search)
 
