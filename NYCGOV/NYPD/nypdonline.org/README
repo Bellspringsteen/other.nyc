@@ -1,0 +1,35 @@
+
+Analyze Data
+    6. Most arrests by officer on a single day
+    7. Most arrests by officer in a year
+    8. Variance of arrests
+    9. Plot variance by tenure, race, rank
+    13. more training, more CCRB?
+    14. most popular last name
+    15. Outliers # of arrests per year, per day, variance
+    16. Print out Filter 22 values. 
+    17. What officer got most DEPT Auto Accidents
+    
+    
+
+
+What are all the filters?
+a. one is some kind of graph of races, what is it? filter_1035  and filter_1034 similar based on sex
+b. filter22 INTERNAL_INVESTIGATIONS, FIREARM DISCHARGE
+
+
+Ideas:
+
+1. CCRB and # arrests that day
+2. Arrests day of week
+3. Arrets plot by year
+4. Why is it that officers tend to arrest for similar things. Isnt that strange? Or its not but its not what you would expect naively.
+5. Does arrest pattern change after CCRB? After disceplenary action?
+
+
+Notes:
+
+sort arrest_types | uniq -c | sort -bgr > arrest_types_sorted.txt
+Since 2018 NYPD has been quarterly making arrest data public but not the arresting officer https://data.cityofnewyork.us/Public-Safety/NYPD-Arrest-Data-Year-to-Date-/uip8-fykc
+For CCRB, downloaded from https://www.propublica.org/datastore/dataset/civilian-complaints-against-new-york-city-police-officers propublic website which include officer
+EXECUTIVE PROTECTION UNIT ???

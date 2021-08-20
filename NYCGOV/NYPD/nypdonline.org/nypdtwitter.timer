@@ -1,0 +1,11 @@
+[Unit]
+Description=Starts NYPD Twitter Service
+Requires=nypdtwitter.service
+
+[Timer]
+Unit=nypdtwitter.service
+OnCalendar=*-*-* 9:00:00
+
+[Install]
+WantedBy=timers.target
+

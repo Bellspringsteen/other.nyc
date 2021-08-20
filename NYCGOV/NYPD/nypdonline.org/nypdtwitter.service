@@ -1,0 +1,10 @@
+[Unit]
+Description=NYPD DOT Service
+After=network.target
+
+[Service]
+WorkingDirectory=/home/ubuntu/nypd/
+ExecStart=/usr/bin/python3 twitter_bot.py -key=XYZ -token=XYZ
+
+[Install]
+WantedBy=default.target
