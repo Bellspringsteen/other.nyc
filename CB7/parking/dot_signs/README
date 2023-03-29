@@ -1,0 +1,18 @@
+DOT Open Data doesnt seem to have all the data, request direct from their site
+
+curl -H "Authorization: Basic cHVibGljOkQwdFB1NmwxY0BwMQ==" "https://nycdotsigns.net/api/v1/signs?coord=-73.98202275167277:40.76823255096025,-73.99373980855607:40.77225815848834,-73.96858872576196:40.80501653980773,-73.95811930425744:40.80050419537414&category=21&near_by=false&address=&location_service=false&distance=200&sign_standard_subtype_id=" > ~/Downloads/parking.txt
+
+
+ogr2ogr -f CSV ~/Downloads/output.csv ~/Downloads/parking.txt -lco GEOMETRY=AS_WKT
+
+
+
+# Other sources of info
+https://eservices.nysed.gov/sedreports/list?id=1 for NY State Schools
+https://github.com/jehiah/nyc_parking
+
+Maybe how to find number of students https://nces.ed.gov/surveys/pss/privateschoolsearch/school_detail.asp?Search=1&Zip=10037&Miles=15&SchoolPageNum=5&ID=AA890707
+
+TODO
+1. Python, iterate through and group all csvs for COL E,F,G,H identical. Then Sort from smallest to largest. 
+2. Then iterate through from top, if its PARKING/STANDING on a WEST street.(Any not WEST streets?) can you auto find the distances? 
