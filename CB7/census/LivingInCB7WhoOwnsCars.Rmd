@@ -1,0 +1,261 @@
+---
+title: "Who has access to cars in CB7"
+output: html_notebook
+---
+
+Initial look at answering the question " Who has access to cars in CB7?"
+
+Notes:
+* Its access to vehicles, not you are the primary driver etc. So if you are 17 and your parents have a car, you show up.
+* I used iPums.Org to extract the data, the csv for this file is the following iPums exports
+
+Description: Revision of (CB7 Car Ownership)
+Samples selected:
+      2017-2021, ACS 5-year
+            Note: 
+            Density of the full data file:  5.0%
+            Density of your extract: 5.0%
+
+      2021 ACS
+            Note: 
+            Density of the full data file:  1.0%
+            Density of your extract: 1.0%
+
+File Type:                    rectangular
+Case Selection:               No
+  Variable                         Columns        Len   2021    2021    
+  YEAR                         H   1-4            4     X       X       
+  MULTYEAR                     H   5-8            4     X       .       
+  SAMPLE                       H   9-14           6     X       X       
+  SERIAL                       H  15-22           8     X       X       
+  CBSERIAL                     H  23-35          13     X       X       
+  HHWT                         H  36-45          10     X       X       
+  CLUSTER                      H  46-58          13     X       X       
+  PUMA                         H  59-63           5     X       X       
+  STRATA                       H  64-75          12     X       X       
+  GQ                           H  76              1     X       X       
+  HHINCOME                     H  77-83           7     X       X       
+  VEHICLES                     H  84              1     X       X       
+  PERNUM                       P  85-88           4     X       X       
+  PERWT                        P  89-98          10     X       X       
+  AGE                          P  99-101          3     X       X       
+  EMPSTAT                      P 102              1     X       X       
+  EMPSTATD                     P 103-104          2     X       X     
+  
+
+```{r}
+print("Hello World")
+```
+
+```{r}
+# Load the data
+mydata <- read.csv("/home/regolith/Development/other.nyc/CB7/census/usa_00008.csv")
+```
+
+```{r}
+column_names <- colnames(mydata)
+
+# Print the column names
+print(column_names)
+```
+
+Do some filtering
+```{r}
+# Replace 9999999 with 0 in HHINCOME
+mydata$HHINCOME[mydata$HHINCOME == 9999999] <- 0
+
+# Replace 9 with 0 in VEHICLES, see iPums guide for 9. 
+mydata$VEHICLES <- ifelse(mydata$VEHICLES == 9, 0, mydata$VEHICLES)
+
+# Filter the data to include only the observations for PUMA 3807, this is UWS.
+mydata_filtered <- subset(mydata, PUMA == "3806");
+
+mydata_filtered$VEHICLES_BINARY <- ifelse(mydata_filtered$VEHICLES > 0, "1+ vehicles", "0 vehicles")
+
+
+# Convert vehicles variable to binary (0 vehicles or 1+ vehicles)
+mydata_filtered$VEHICLES_BINARY <- ifelse(mydata_filtered$VEHICLES > 0, "1+ vehicles", "0 vehicles")
+
+```
+
+
+Income by Car Access
+
+```{r}
+library(ggplot2)
+
+library(scales)
+
+# Filter the data for users with and without access to a car
+with_car <- mydata_filtered[mydata_filtered$VEHICLES_BINARY == "1+ vehicles" & mydata_filtered$HHINCOME >= 0, ]
+without_car <- mydata_filtered[mydata_filtered$VEHICLES_BINARY == "0 vehicles" & mydata_filtered$HHINCOME >= 0, ]
+
+# Aggregate the income into bins of $100,000
+with_car$HHINCOME_BIN <- cut(with_car$HHINCOME, breaks = seq(0, max(with_car$HHINCOME) + 10000, 10000), labels = FALSE)
+without_car$HHINCOME_BIN <- cut(without_car$HHINCOME, breaks = seq(0, max(without_car$HHINCOME) + 10000, 10000), labels = FALSE)
+
+# Create the histogram
+histogram <- ggplot() +
+  geom_histogram(data = with_car, aes(x = HHINCOME_BIN), binwidth = 1, fill = "red", alpha = 0.7) +
+  geom_histogram(data = without_car, aes(x = HHINCOME_BIN), binwidth = 1, fill = "blue", alpha = 0.7) +
+  labs(x = "HHINCOME", y = "Count") +
+  ggtitle("Histogram of HHINCOME by Car Access") +
+  theme_bw() +
+  scale_x_continuous(labels = function(x) ifelse(x > 99, paste0(x/100, "M"), paste0(x*10, "k"))) + 
+  theme(axis.title.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank())
+# Save the plot with higher resolution
+ggsave("histogram_hhincome.png", plot = histogram, width = 8, height = 6, dpi = 300)
+
+# Display the plot in RStudio
+histogram
+
+ library(dplyr)
+
+# Filter the data for households without a car
+data_filtered <- mydata_filtered[mydata_filtered$VEHICLES_BINARY == "0 vehicles", ]
+
+# Calculate the weighted average household income
+avg_income <- sum(data_filtered$HHINCOME * data_filtered$HHWT) / sum(data_filtered$HHWT)
+
+# Print the average household income
+description <- "Average household income in CB7 without a car:"
+
+# Print the average household income with the descriptive string
+print(paste(description, avg_income, sep = " "))
+library(dplyr)
+
+# Filter the data for households with 1+ cars
+data_filtered <- mydata_filtered[mydata_filtered$VEHICLES_BINARY == "1+ vehicles", ]
+
+# Calculate the weighted average household income
+avg_income <- sum(data_filtered$HHINCOME * data_filtered$HHWT) / sum(data_filtered$HHWT)
+
+# Print the average household income
+description <- "Average household income in CB7 with a car:"
+
+# Print the average household income with the descriptive string
+print(paste(description, avg_income, sep = " "))
+
+
+library(dplyr)
+
+# Filter the data for households without a car
+data_filtered_without_car <- mydata_filtered[mydata_filtered$VEHICLES_BINARY == "0 vehicles", ]
+
+# Calculate the weighted median household income
+median_income_without_car <- median(data_filtered_without_car$HHINCOME, weights = data_filtered_without_car$HHWT)
+
+# Print the median household income without a car
+print(paste("Median household income in CB7 without a car:", median_income_without_car, sep = " "))
+
+
+# Filter the data for households with 1+ cars
+data_filtered_with_car <- mydata_filtered[mydata_filtered$VEHICLES_BINARY == "1+ vehicles", ]
+
+# Calculate the weighted median household income
+median_income_with_car <- median(data_filtered_with_car$HHINCOME, weights = data_filtered_with_car$HHWT)
+
+# Print the median household income with 1+ cars
+print(paste("Median household income in CB7 with 1+ cars:", median_income_with_car, sep = " "))
+
+
+
+```
+
+
+
+Age of Car owners?
+
+```{r}
+
+# Filter the data for users with and without access to a car
+with_car <- mydata_filtered[mydata_filtered$VEHICLES_BINARY == "1+ vehicles", ]
+without_car <- mydata_filtered[mydata_filtered$VEHICLES_BINARY == "0 vehicles", ]
+
+# Aggregate the age into bins of 10 years
+with_car$AGE_BIN <- cut(with_car$AGE, breaks = seq(0, max(with_car$AGE) + 10, 10), labels = FALSE)
+without_car$AGE_BIN <- cut(without_car$AGE, breaks = seq(0, max(without_car$AGE) + 10, 10), labels = FALSE)
+
+# Create the histogram
+histogram <- ggplot() +
+  geom_histogram(data = with_car, aes(x = AGE_BIN), binwidth = 1, fill = "red", alpha = 0.7) +
+  geom_histogram(data = without_car, aes(x = AGE_BIN), binwidth = 1, fill = "blue", alpha = 0.7) +
+  scale_fill_manual(name="group", values=c("r" = "red", "b"="blue"), labels=c("b"="blue values", "r"="red values"))+
+  labs(x = "Age", y = "Count") +
+  ggtitle("Histogram of Age by Car Access") +
+  theme_bw() +
+  scale_x_continuous(labels = function(x) paste0(x*10, "-", (x*10 + 9))) +
+  theme(axis.title.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank())
+
+# Save the plot with higher resolution
+ggsave("histogram_age.png", plot = histogram, width = 8, height = 6, dpi = 300)
+
+# Display the plot in RStudio
+histogram
+
+```
+
+Put it all together. Car ownership by Age, Income, show car owner vs non-car owner. 
+
+
+
+```{r}
+
+library(ggplot2)
+
+# Filter the data for users with employment status 0
+emp_status_0 <- mydata_filtered[mydata_filtered$EMPSTAT == 1, ]
+
+# Create the scatter plot
+scatter_plot <- ggplot(emp_status_0, aes(x = AGE, y = HHINCOME, color = VEHICLES_BINARY, size = PERWT)) +
+  geom_point(alpha = 0.6) +
+  scale_color_manual(values = c("0 vehicles" = "blue", "1+ vehicles" = "red")) +
+  labs(x = "Age", y = "Income", color = "Vehicles", size = "Weight", title = "Income for People with employment status Employed") +
+  scale_size_continuous(range = c(1, 10)) +
+  theme_classic()
+
+# Display the scatter plot
+scatter_plot
+
+
+library(ggplot2)
+
+# Filter the data for users with employment status 0
+emp_status_0 <- mydata_filtered[mydata_filtered$EMPSTAT == 2, ]
+
+# Create the scatter plot
+scatter_plot <- ggplot(emp_status_0, aes(x = AGE, y = HHINCOME, color = VEHICLES_BINARY, size = PERWT)) +
+  geom_point(alpha = 0.6) +
+  scale_color_manual(values = c("0 vehicles" = "blue", "1+ vehicles" = "red")) +
+  labs(x = "Age", y = "Income", color = "Vehicles", size = "Weight", title = "Income for People with employment status UnEmployed") +
+  scale_size_continuous(range = c(1, 10)) +
+  theme_classic()
+
+# Display the scatter plot
+scatter_plot
+
+
+library(ggplot2)
+
+# Filter the data for users with employment status 0
+emp_status_0 <- mydata_filtered[mydata_filtered$EMPSTAT == 3, ]
+
+# Create the scatter plot
+scatter_plot <- ggplot(emp_status_0, aes(x = AGE, y = HHINCOME, color = VEHICLES_BINARY, size = PERWT)) +
+  geom_point(alpha = 0.6) +
+  scale_color_manual(values = c("0 vehicles" = "blue", "1+ vehicles" = "red")) +
+  labs(x = "Age", y = "Income", color = "Vehicles", size = "Weight", title = "Income for People with employment status Not In Labor Force") +
+  scale_size_continuous(range = c(1, 10)) +
+  theme_classic()
+
+# Display the scatter plot
+scatter_plot
+
+
+```
+
+
