@@ -1,0 +1,1192 @@
+{
+  "meta": {
+    "data_source": "LL84 Energy & Water Benchmarking 2022 (NYC Open Data)",
+    "pluto_source": "PLUTO 23v3 (NYC DCP)",
+    "note": "District steam customers identified from LL84 'District Steam Use (kBtu)' > 0",
+    "steam_network_west_terminus": "96th Street",
+    "steam_network_east_terminus": "89th Street",
+    "total_pipe_miles": 105,
+    "system_started": 1882
+  },
+  "total_manhattan_steam_buildings": 1270,
+  "total_steam_buildings_all_boroughs": 1325,
+  "by_neighborhood": [
+    {
+      "neighborhood": "Midtown East / 34-59",
+      "steam_buildings": 309,
+      "total_steam_kbtu": 3584204367.299999,
+      "median_steam_kbtu": 6370493.5,
+      "large_buildings": 634,
+      "large_res_buildings": 304.0,
+      "total_res_units": 38891.0,
+      "adoption_pct": 48.7
+    },
+    {
+      "neighborhood": "Upper East Side",
+      "steam_buildings": 216,
+      "total_steam_kbtu": 3043891771.099998,
+      "median_steam_kbtu": 6400707.8,
+      "large_buildings": 1279,
+      "large_res_buildings": 1091.0,
+      "total_res_units": 102607.0,
+      "adoption_pct": 16.9
+    },
+    {
+      "neighborhood": "Midtown West / 34-59",
+      "steam_buildings": 205,
+      "total_steam_kbtu": 3375108027.300001,
+      "median_steam_kbtu": 7544083.3,
+      "large_buildings": 1015,
+      "large_res_buildings": 343.0,
+      "total_res_units": 55285.0,
+      "adoption_pct": 20.2
+    },
+    {
+      "neighborhood": "Financial District",
+      "steam_buildings": 152,
+      "total_steam_kbtu": 2386590336.6999993,
+      "median_steam_kbtu": 10136323.45,
+      "large_buildings": 420,
+      "large_res_buildings": 191.0,
+      "total_res_units": 39707.0,
+      "adoption_pct": 36.2
+    },
+    {
+      "neighborhood": "Flatiron / Gramercy",
+      "steam_buildings": 116,
+      "total_steam_kbtu": 1988718923.5,
+      "median_steam_kbtu": 6800376.199999999,
+      "large_buildings": 685,
+      "large_res_buildings": 373.0,
+      "total_res_units": 51932.0,
+      "adoption_pct": 16.9
+    },
+    {
+      "neighborhood": "East Village / LES",
+      "steam_buildings": 64,
+      "total_steam_kbtu": 1373609391.9999998,
+      "median_steam_kbtu": 10969974.8,
+      "large_buildings": 752,
+      "large_res_buildings": 502.0,
+      "total_res_units": 65316.0,
+      "adoption_pct": 8.5
+    },
+    {
+      "neighborhood": "Upper West Side",
+      "steam_buildings": 54,
+      "total_steam_kbtu": 980122138.3999999,
+      "median_steam_kbtu": 14673156.1,
+      "large_buildings": 1205,
+      "large_res_buildings": 1031.0,
+      "total_res_units": 100714.0,
+      "adoption_pct": 4.5
+    },
+    {
+      "neighborhood": "Chelsea / Hell's Kitchen",
+      "steam_buildings": 47,
+      "total_steam_kbtu": 1561396939.8000002,
+      "median_steam_kbtu": 6483606.1,
+      "large_buildings": 950,
+      "large_res_buildings": 484.0,
+      "total_res_units": 43688.0,
+      "adoption_pct": 4.9
+    },
+    {
+      "neighborhood": "Other Manhattan",
+      "steam_buildings": 43,
+      "total_steam_kbtu": 2056763051.8999991,
+      "median_steam_kbtu": 24073422.3,
+      "large_buildings": 308,
+      "large_res_buildings": 202.0,
+      "total_res_units": 48621.0,
+      "adoption_pct": 14.0
+    },
+    {
+      "neighborhood": "Tribeca / SoHo",
+      "steam_buildings": 37,
+      "total_steam_kbtu": 302711614.99999994,
+      "median_steam_kbtu": 6371441.7,
+      "large_buildings": 902,
+      "large_res_buildings": 576.0,
+      "total_res_units": 27960.0,
+      "adoption_pct": 4.1
+    },
+    {
+      "neighborhood": "Upper Manhattan (96th+)",
+      "steam_buildings": 27,
+      "total_steam_kbtu": 298591662.0,
+      "median_steam_kbtu": 6056624.9,
+      "large_buildings": 2290,
+      "large_res_buildings": 1908.0,
+      "total_res_units": 137506.0,
+      "adoption_pct": 1.2
+    }
+  ],
+  "uws": {
+    "total_steam_buildings": 54,
+    "by_zip": {
+      "10023": 42,
+      "10024": 6,
+      "10025": 6
+    },
+    "by_street_band": [
+      {
+        "street_band": "59th\u201364th St",
+        "steam_buildings": 6,
+        "total_steam_kbtu": 79346633.1
+      },
+      {
+        "street_band": "65th\u201369th St",
+        "steam_buildings": 8,
+        "total_steam_kbtu": 142553764.0
+      },
+      {
+        "street_band": "70th\u201374th St",
+        "steam_buildings": 2,
+        "total_steam_kbtu": 11719034.6
+      },
+      {
+        "street_band": "75th\u201379th St",
+        "steam_buildings": 0,
+        "total_steam_kbtu": 0.0
+      },
+      {
+        "street_band": "80th\u201384th St",
+        "steam_buildings": 0,
+        "total_steam_kbtu": 0.0
+      },
+      {
+        "street_band": "85th\u201389th St",
+        "steam_buildings": 0,
+        "total_steam_kbtu": 0.0
+      },
+      {
+        "street_band": "90th\u201395th St",
+        "steam_buildings": 5,
+        "total_steam_kbtu": 59082420.199999996
+      },
+      {
+        "street_band": "96th+ St",
+        "steam_buildings": 1,
+        "total_steam_kbtu": 16936417.3
+      },
+      {
+        "street_band": "Unknown",
+        "steam_buildings": 32,
+        "total_steam_kbtu": 670483869.1999999
+      }
+    ],
+    "property_types": {
+      "Multifamily Housing": 37,
+      "Office": 4,
+      "Performing Arts": 4,
+      "College/University": 4,
+      "K-12 School": 3,
+      "Mixed Use Property": 1,
+      "Museum": 1
+    },
+    "heat_sources_all_large_bldgs": {
+      "Natural Gas": 825,
+      "Fuel Oil": 292,
+      "Steam": 50,
+      "No Data": 28
+    },
+    "buildings": [
+      {
+        "name": "1 Central Park West",
+        "address": "1 Central Park West",
+        "zip": "10023",
+        "cross_street": null,
+        "street_band": "Unknown",
+        "property_type": "Multifamily Housing",
+        "steam_kbtu": 35475477.0,
+        "year_built": 1960,
+        "gfa_sqft": "618334",
+        "steam_mmbtu": 35475.0
+      },
+      {
+        "name": "1 West End Avenue",
+        "address": "1 West End Avenue",
+        "zip": "10023",
+        "cross_street": null,
+        "street_band": "Unknown",
+        "property_type": "Multifamily Housing",
+        "steam_kbtu": 35124679.2,
+        "year_built": 2014,
+        "gfa_sqft": "930605",
+        "steam_mmbtu": 35125.0
+      },
+      {
+        "name": "M485-0100994",
+        "address": "100 Amsterdam Avenue",
+        "zip": "10023",
+        "cross_street": null,
+        "street_band": "Unknown",
+        "property_type": "K-12 School",
+        "steam_kbtu": 18649088.0,
+        "year_built": 1982,
+        "gfa_sqft": "401020",
+        "steam_mmbtu": 18649.0
+      },
+      {
+        "name": "Maxwell: 100 W 92nd St & 640 Columbus Ave",
+        "address": "100 West 92nd Street",
+        "zip": "10025",
+        "cross_street": 92.0,
+        "street_band": "90th\u201395th St",
+        "property_type": "Multifamily Housing",
+        "steam_kbtu": 9430408.0,
+        "year_built": 1969,
+        "gfa_sqft": "206624",
+        "steam_mmbtu": 9430.0
+      },
+      {
+        "name": "110 West End Ave",
+        "address": "110 West End Ave",
+        "zip": "10023",
+        "cross_street": null,
+        "street_band": "Unknown",
+        "property_type": "Multifamily Housing",
+        "steam_kbtu": 11080757.0,
+        "year_built": 1904,
+        "gfa_sqft": "403200",
+        "steam_mmbtu": 11081.0
+      },
+      {
+        "name": "Wise Towers",
+        "address": "111 W 90th St",
+        "zip": "10024",
+        "cross_street": 90.0,
+        "street_band": "90th\u201395th St",
+        "property_type": "Multifamily Housing",
+        "steam_kbtu": 22190683.0,
+        "year_built": 1963,
+        "gfa_sqft": "392411",
+        "steam_mmbtu": 22191.0
+      },
+      {
+        "name": "LC. Lowenstein Center",
+        "address": "113 W 60th St",
+        "zip": "10023",
+        "cross_street": 60.0,
+        "street_band": "59th\u201364th St",
+        "property_type": "College/University",
+        "steam_kbtu": 21506881.8,
+        "year_built": 1961,
+        "gfa_sqft": "386575",
+        "steam_mmbtu": 21507.0
+      },
+      {
+        "name": "Fordham Lincoln Center Campus",
+        "address": "113 W 62nd St",
+        "zip": "10023",
+        "cross_street": 62.0,
+        "street_band": "59th\u201364th St",
+        "property_type": "College/University",
+        "steam_kbtu": 21506881.8,
+        "year_built": 1961,
+        "gfa_sqft": "1147386",
+        "steam_mmbtu": 21507.0
+      },
+      {
+        "name": "M490-0100198",
+        "address": "122 Amsterdam Avenue",
+        "zip": "10023",
+        "cross_street": null,
+        "street_band": "Unknown",
+        "property_type": "K-12 School",
+        "steam_kbtu": 14527397.2,
+        "year_built": 1973,
+        "gfa_sqft": "524950",
+        "steam_mmbtu": 14527.0
+      },
+      {
+        "name": "125 Columbus Avenue & 2 Lincoln Square - Parent Property",
+        "address": "125 Columbus Avenue",
+        "zip": "10023",
+        "cross_street": null,
+        "street_band": "Unknown",
+        "property_type": "Multifamily Housing",
+        "steam_kbtu": 15050435.0,
+        "year_built": 1974,
+        "gfa_sqft": "335705",
+        "steam_mmbtu": 15050.0
+      },
+      {
+        "name": "ABC 125 West End Avenue",
+        "address": "125 West End Avenue",
+        "zip": "10023",
+        "cross_street": null,
+        "street_band": "Unknown",
+        "property_type": "Office",
+        "steam_kbtu": 17099.0,
+        "year_built": 1929,
+        "gfa_sqft": "283475",
+        "steam_mmbtu": 17.0
+      },
+      {
+        "name": "125 WEA and 320W",
+        "address": "125 West End Avenue",
+        "zip": "10023",
+        "cross_street": null,
+        "street_band": "Unknown",
+        "property_type": "Office",
+        "steam_kbtu": 14149514.5,
+        "year_built": 1929,
+        "gfa_sqft": "517475",
+        "steam_mmbtu": 14150.0
+      },
+      {
+        "name": "LCPA - Rose Building",
+        "address": "131 Amsterdam Avenue",
+        "zip": "10023",
+        "cross_street": null,
+        "street_band": "Unknown",
+        "property_type": "Office",
+        "steam_kbtu": 16043920.8,
+        "year_built": 1990,
+        "gfa_sqft": "339539",
+        "steam_mmbtu": 16044.0
+      },
+      {
+        "name": "LCPA - CAMPUS",
+        "address": "132 W 65th Street",
+        "zip": "10023",
+        "cross_street": 65.0,
+        "street_band": "65th\u201369th St",
+        "property_type": "Performing Arts",
+        "steam_kbtu": 83006803.8,
+        "year_built": 1959,
+        "gfa_sqft": "1352200",
+        "steam_mmbtu": 83007.0
+      },
+      {
+        "name": "Fordham. 140 W 62nd St",
+        "address": "140 W 62nd St",
+        "zip": "10023",
+        "cross_street": 62.0,
+        "street_band": "59th\u201364th St",
+        "property_type": "College/University",
+        "steam_kbtu": 2983074.2,
+        "year_built": 1961,
+        "gfa_sqft": "159040",
+        "steam_mmbtu": 2983.0
+      },
+      {
+        "name": "AKAM - 140 West End Avenue",
+        "address": "140 West End Avenue",
+        "zip": "10023",
+        "cross_street": null,
+        "street_band": "Unknown",
+        "property_type": "Multifamily Housing",
+        "steam_kbtu": 25222870.8,
+        "year_built": 1964,
+        "gfa_sqft": "656646",
+        "steam_mmbtu": 25223.0
+      },
+      {
+        "name": "15 Central Park West",
+        "address": "15 Central Park West",
+        "zip": "10023",
+        "cross_street": null,
+        "street_band": "Unknown",
+        "property_type": "Multifamily Housing",
+        "steam_kbtu": 35245523.2,
+        "year_built": 2005,
+        "gfa_sqft": "822592",
+        "steam_mmbtu": 35246.0
+      },
+      {
+        "name": "Park Laurel",
+        "address": "15 West 3rd Street",
+        "zip": "10023",
+        "cross_street": null,
+        "street_band": "Unknown",
+        "property_type": "Multifamily Housing",
+        "steam_kbtu": 2458447.8,
+        "year_built": 1999,
+        "gfa_sqft": "205665",
+        "steam_mmbtu": 2458.0
+      },
+      {
+        "name": "(7080) - One Lincoln Square",
+        "address": "150 Columbus Ave",
+        "zip": "10023",
+        "cross_street": null,
+        "street_band": "Unknown",
+        "property_type": "Multifamily Housing",
+        "steam_kbtu": 7802516.0,
+        "year_built": 1995,
+        "gfa_sqft": "328941.1",
+        "steam_mmbtu": 7803.0
+      },
+      {
+        "name": "AKAM - 150 West End Avenue",
+        "address": "150 West End Avenue",
+        "zip": "10023",
+        "cross_street": null,
+        "street_band": "Unknown",
+        "property_type": "Multifamily Housing",
+        "steam_kbtu": 20339064.7,
+        "year_built": 1963,
+        "gfa_sqft": "513351",
+        "steam_mmbtu": 20339.0
+      },
+      {
+        "name": "155 West 66th Street",
+        "address": "155 West 66th Street",
+        "zip": "10023",
+        "cross_street": 66.0,
+        "street_band": "65th\u201369th St",
+        "property_type": "Multifamily Housing",
+        "steam_kbtu": 6535766.9,
+        "year_built": 1999,
+        "gfa_sqft": "207458",
+        "steam_mmbtu": 6536.0
+      },
+      {
+        "name": "AKAM - 160 West 66th Street",
+        "address": "160 West 66th Street",
+        "zip": "10023",
+        "cross_street": 66.0,
+        "street_band": "65th\u201369th St",
+        "property_type": "Multifamily Housing",
+        "steam_kbtu": 13439484.6,
+        "year_built": 1989,
+        "gfa_sqft": "404798",
+        "steam_mmbtu": 13439.0
+      },
+      {
+        "name": "(7028-7030) - 160 WEA",
+        "address": "160 West End Avenue",
+        "zip": "10023",
+        "cross_street": null,
+        "street_band": "Unknown",
+        "property_type": "Multifamily Housing",
+        "steam_kbtu": 18388428.0,
+        "year_built": 1962,
+        "gfa_sqft": "481931",
+        "steam_mmbtu": 18388.0
+      },
+      {
+        "name": "165 W 66 St Apt Corp.",
+        "address": "165 West 66th Street",
+        "zip": "10023",
+        "cross_street": 66.0,
+        "street_band": "65th\u201369th St",
+        "property_type": "Multifamily Housing",
+        "steam_kbtu": 63417.7,
+        "year_built": 1962,
+        "gfa_sqft": "422976",
+        "steam_mmbtu": 63.0
+      },
+      {
+        "name": "Lincoln Towers",
+        "address": "165 West End Ave.",
+        "zip": "10023",
+        "cross_street": null,
+        "street_band": "Unknown",
+        "property_type": "Multifamily Housing",
+        "steam_kbtu": 29571881.6,
+        "year_built": 1962,
+        "gfa_sqft": "567074",
+        "steam_mmbtu": 29572.0
+      },
+      {
+        "name": "(7036-7038) - 170 WEA",
+        "address": "170 West End Avenue",
+        "zip": "10023",
+        "cross_street": null,
+        "street_band": "Unknown",
+        "property_type": "Multifamily Housing",
+        "steam_kbtu": 16446452.3,
+        "year_built": 1962,
+        "gfa_sqft": "472534.2",
+        "steam_mmbtu": 16446.0
+      },
+      {
+        "name": "176 W 94th St",
+        "address": "176 West 94th Street",
+        "zip": "10025",
+        "cross_street": 94.0,
+        "street_band": "90th\u201395th St",
+        "property_type": "Multifamily Housing",
+        "steam_kbtu": 6418286.8,
+        "year_built": 1967,
+        "gfa_sqft": "96184",
+        "steam_mmbtu": 6418.0
+      },
+      {
+        "name": "AKAM - 180 West End Avenue",
+        "address": "180 West End Avenue",
+        "zip": "10023",
+        "cross_street": null,
+        "street_band": "Unknown",
+        "property_type": "Multifamily Housing",
+        "steam_kbtu": 14818915.0,
+        "year_built": 1965,
+        "gfa_sqft": "521080",
+        "steam_mmbtu": 14819.0
+      },
+      {
+        "name": "(7040-7042) - 185 WEA",
+        "address": "185 West End Avenue",
+        "zip": "10023",
+        "cross_street": null,
+        "street_band": "Unknown",
+        "property_type": "Multifamily Housing",
+        "steam_kbtu": 26846226.5,
+        "year_built": 1960,
+        "gfa_sqft": "484804.6",
+        "steam_mmbtu": 26846.0
+      },
+      {
+        "name": "1855 Broadway",
+        "address": "1855 Broadway",
+        "zip": "10023",
+        "cross_street": null,
+        "street_band": "Unknown",
+        "property_type": "College/University",
+        "steam_kbtu": 7124580.4,
+        "year_built": 1905,
+        "gfa_sqft": "73500",
+        "steam_mmbtu": 7125.0
+      },
+      {
+        "name": "The Grand Millennium Condominium",
+        "address": "1965 Broadway",
+        "zip": "10023",
+        "cross_street": null,
+        "street_band": "Unknown",
+        "property_type": "Multifamily Housing",
+        "steam_kbtu": 8425556.2,
+        "year_built": 1995,
+        "gfa_sqft": "601633",
+        "steam_mmbtu": 8426.0
+      },
+      {
+        "name": "2 Columbus Ave Condominium",
+        "address": "2 Columbus Ave",
+        "zip": "10023",
+        "cross_street": null,
+        "street_band": "Unknown",
+        "property_type": "Multifamily Housing",
+        "steam_kbtu": 9710781.8,
+        "year_built": 1999,
+        "gfa_sqft": "204895",
+        "steam_mmbtu": 9711.0
+      },
+      {
+        "name": "CIG - 1028831 - David H. Koch Theater (LL84)",
+        "address": "20 Lincoln Ctr",
+        "zip": "10023",
+        "cross_street": null,
+        "street_band": "Unknown",
+        "property_type": "Performing Arts",
+        "steam_kbtu": 19348053.8,
+        "year_built": 1964,
+        "gfa_sqft": "247480",
+        "steam_mmbtu": 19348.0
+      },
+      {
+        "name": "CIG - 1083846 - American Museum of Natural History (LL84)",
+        "address": "200 Central Park West",
+        "zip": "10024",
+        "cross_street": null,
+        "street_band": "Unknown",
+        "property_type": "Museum",
+        "steam_kbtu": 96446784.0,
+        "year_built": 1877,
+        "gfa_sqft": "1500000",
+        "steam_mmbtu": 96447.0
+      },
+      {
+        "name": "AKAM - 205 West End Avenue",
+        "address": "205 West End Avenue",
+        "zip": "10023",
+        "cross_street": null,
+        "street_band": "Unknown",
+        "property_type": "Multifamily Housing",
+        "steam_kbtu": 29783015.9,
+        "year_built": 1960,
+        "gfa_sqft": "650325",
+        "steam_mmbtu": 29783.0
+      },
+      {
+        "name": "Dermot - 21 West End Avenue",
+        "address": "21 West End Avenue",
+        "zip": "10023",
+        "cross_street": null,
+        "street_band": "Unknown",
+        "property_type": "Multifamily Housing",
+        "steam_kbtu": 17003696.2,
+        "year_built": 2013,
+        "gfa_sqft": "756187",
+        "steam_mmbtu": 17004.0
+      },
+      {
+        "name": "Halstead - 279 Central Park West",
+        "address": "279 Central Park West",
+        "zip": "10024",
+        "cross_street": null,
+        "street_band": "Unknown",
+        "property_type": "Multifamily Housing",
+        "steam_kbtu": 2606502.2,
+        "year_built": 1988,
+        "gfa_sqft": "145435",
+        "steam_mmbtu": 2607.0
+      },
+      {
+        "name": "BBL 1-01158-0040: DPR, DOE (LL84)",
+        "address": "279 West 70th St",
+        "zip": "10023",
+        "cross_street": 70.0,
+        "street_band": "70th\u201374th St",
+        "property_type": "K-12 School",
+        "steam_kbtu": 3207872.4,
+        "year_built": 1963,
+        "gfa_sqft": "106200",
+        "steam_mmbtu": 3208.0
+      },
+      {
+        "name": "303 West 66th Street",
+        "address": "303 West 66th Street",
+        "zip": "10023",
+        "cross_street": 66.0,
+        "street_band": "65th\u201369th St",
+        "property_type": "Multifamily Housing",
+        "steam_kbtu": 20828275.7,
+        "year_built": 1962,
+        "gfa_sqft": "426476",
+        "steam_mmbtu": 20828.0
+      },
+      {
+        "name": "AKAM - 315 West 70th Street",
+        "address": "315 West 70th Street",
+        "zip": "10023",
+        "cross_street": 70.0,
+        "street_band": "70th\u201374th St",
+        "property_type": "Multifamily Housing",
+        "steam_kbtu": 8511162.2,
+        "year_built": 1963,
+        "gfa_sqft": "258974",
+        "steam_mmbtu": 8511.0
+      },
+      {
+        "name": "ABC 320 W",
+        "address": "320 West 66th Street",
+        "zip": "10023",
+        "cross_street": 66.0,
+        "street_band": "65th\u201369th St",
+        "property_type": "Performing Arts",
+        "steam_kbtu": 14132415.5,
+        "year_built": 1929,
+        "gfa_sqft": "279000",
+        "steam_mmbtu": 14132.0
+      },
+      {
+        "name": "37 West 65th Street",
+        "address": "37 West 65th Street",
+        "zip": "10023",
+        "cross_street": 65.0,
+        "street_band": "65th\u201369th St",
+        "property_type": "Office",
+        "steam_kbtu": 1420383.5,
+        "year_built": 1928,
+        "gfa_sqft": "64294",
+        "steam_mmbtu": 1420.0
+      },
+      {
+        "name": "Sofia Condominium",
+        "address": "43 West 61 Street",
+        "zip": "10023",
+        "cross_street": 61.0,
+        "street_band": "59th\u201364th St",
+        "property_type": "Multifamily Housing",
+        "steam_kbtu": 2844716.3,
+        "year_built": 1930,
+        "gfa_sqft": "204711",
+        "steam_mmbtu": 2845.0
+      },
+      {
+        "name": "43 West 64th St",
+        "address": "43 West 64th St",
+        "zip": "10023",
+        "cross_street": 64.0,
+        "street_band": "59th\u201364th St",
+        "property_type": "Multifamily Housing",
+        "steam_kbtu": 5875292.7,
+        "year_built": 2003,
+        "gfa_sqft": "105934",
+        "steam_mmbtu": 5875.0
+      },
+      {
+        "name": "West Side",
+        "address": "5 West 63rd St",
+        "zip": "10023",
+        "cross_street": 63.0,
+        "street_band": "59th\u201364th St",
+        "property_type": "Mixed Use Property",
+        "steam_kbtu": 24629786.3,
+        "year_built": 1930,
+        "gfa_sqft": "278156",
+        "steam_mmbtu": 24630.0
+      },
+      {
+        "name": "175 West 87th St aka 567-569 Amsterdam Avenue",
+        "address": "561 Amsterdam Ave",
+        "zip": "10024",
+        "cross_street": null,
+        "street_band": "Unknown",
+        "property_type": "Multifamily Housing",
+        "steam_kbtu": 17053586.6,
+        "year_built": 1975,
+        "gfa_sqft": "324992",
+        "steam_mmbtu": 17054.0
+      },
+      {
+        "name": "LCPA - MET/CMP",
+        "address": "60 Columbus Ave",
+        "zip": "10023",
+        "cross_street": null,
+        "street_band": "Unknown",
+        "property_type": "Performing Arts",
+        "steam_kbtu": 83006803.8,
+        "year_built": 1965,
+        "gfa_sqft": "896458",
+        "steam_mmbtu": 83007.0
+      },
+      {
+        "name": "Two Lincoln Square - LDS/BHS",
+        "address": "60 West 66th St.",
+        "zip": "10023",
+        "cross_street": 66.0,
+        "street_band": "65th\u201369th St",
+        "property_type": "Multifamily Housing",
+        "steam_kbtu": 3127216.3,
+        "year_built": 1975,
+        "gfa_sqft": "344230",
+        "steam_mmbtu": 3127.0
+      },
+      {
+        "name": "609 Columbus Ave",
+        "address": "609 Columbus Ave",
+        "zip": "10024",
+        "cross_street": null,
+        "street_band": "Unknown",
+        "property_type": "Multifamily Housing",
+        "steam_kbtu": 6663333.1,
+        "year_built": 1968,
+        "gfa_sqft": "224531",
+        "steam_mmbtu": 6663.0
+      },
+      {
+        "name": "65 W 90 St.",
+        "address": "65 W 90 Street",
+        "zip": "10024",
+        "cross_street": 90.0,
+        "street_band": "90th\u201395th St",
+        "property_type": "Multifamily Housing",
+        "steam_kbtu": 15154.4,
+        "year_built": 1968,
+        "gfa_sqft": "221587",
+        "steam_mmbtu": 15.0
+      },
+      {
+        "name": "Tower West Apartments",
+        "address": "65 W 96th Street",
+        "zip": "10025",
+        "cross_street": 96.0,
+        "street_band": "96th+ St",
+        "property_type": "Multifamily Housing",
+        "steam_kbtu": 16936417.3,
+        "year_built": 1971,
+        "gfa_sqft": "314041",
+        "steam_mmbtu": 16936.0
+      },
+      {
+        "name": "Strycker's Bay",
+        "address": "689 Columbus Ave",
+        "zip": "10025",
+        "cross_street": null,
+        "street_band": "Unknown",
+        "property_type": "Multifamily Housing",
+        "steam_kbtu": 1853014.2,
+        "year_built": 1967,
+        "gfa_sqft": "303950",
+        "steam_mmbtu": 1853.0
+      },
+      {
+        "name": "(7148) - GR Housing Corp",
+        "address": "711 Amsterdam Ave",
+        "zip": "10025",
+        "cross_street": null,
+        "street_band": "Unknown",
+        "property_type": "Multifamily Housing",
+        "steam_kbtu": 14199467.4,
+        "year_built": 1967,
+        "gfa_sqft": "313390",
+        "steam_mmbtu": 14199.0
+      },
+      {
+        "name": "Witkoff - 95 West 95th Street",
+        "address": "95 West 95th Street",
+        "zip": "10025",
+        "cross_street": 95.0,
+        "street_band": "90th\u201395th St",
+        "property_type": "Multifamily Housing",
+        "steam_kbtu": 21027888.0,
+        "year_built": 1971,
+        "gfa_sqft": "278247",
+        "steam_mmbtu": 21028.0
+      }
+    ]
+  },
+  "type_by_neighborhood": [
+    {
+      "neighborhood": "Chelsea / Hell's Kitchen",
+      "building_category": "College / University",
+      "n": 4
+    },
+    {
+      "neighborhood": "Chelsea / Hell's Kitchen",
+      "building_category": "Hotel",
+      "n": 4
+    },
+    {
+      "neighborhood": "Chelsea / Hell's Kitchen",
+      "building_category": "K-12 School",
+      "n": 1
+    },
+    {
+      "neighborhood": "Chelsea / Hell's Kitchen",
+      "building_category": "Multifamily Residential",
+      "n": 8
+    },
+    {
+      "neighborhood": "Chelsea / Hell's Kitchen",
+      "building_category": "Office",
+      "n": 20
+    },
+    {
+      "neighborhood": "Chelsea / Hell's Kitchen",
+      "building_category": "Other / Mixed",
+      "n": 10
+    },
+    {
+      "neighborhood": "East Village / LES",
+      "building_category": "College / University",
+      "n": 3
+    },
+    {
+      "neighborhood": "East Village / LES",
+      "building_category": "Hospital / Healthcare",
+      "n": 5
+    },
+    {
+      "neighborhood": "East Village / LES",
+      "building_category": "Hotel",
+      "n": 2
+    },
+    {
+      "neighborhood": "East Village / LES",
+      "building_category": "K-12 School",
+      "n": 10
+    },
+    {
+      "neighborhood": "East Village / LES",
+      "building_category": "Multifamily Residential",
+      "n": 29
+    },
+    {
+      "neighborhood": "East Village / LES",
+      "building_category": "Office",
+      "n": 10
+    },
+    {
+      "neighborhood": "East Village / LES",
+      "building_category": "Other / Mixed",
+      "n": 5
+    },
+    {
+      "neighborhood": "Financial District",
+      "building_category": "College / University",
+      "n": 4
+    },
+    {
+      "neighborhood": "Financial District",
+      "building_category": "Hospital / Healthcare",
+      "n": 1
+    },
+    {
+      "neighborhood": "Financial District",
+      "building_category": "Hotel",
+      "n": 7
+    },
+    {
+      "neighborhood": "Financial District",
+      "building_category": "K-12 School",
+      "n": 7
+    },
+    {
+      "neighborhood": "Financial District",
+      "building_category": "Multifamily Residential",
+      "n": 31
+    },
+    {
+      "neighborhood": "Financial District",
+      "building_category": "Office",
+      "n": 95
+    },
+    {
+      "neighborhood": "Financial District",
+      "building_category": "Other / Mixed",
+      "n": 7
+    },
+    {
+      "neighborhood": "Flatiron / Gramercy",
+      "building_category": "College / University",
+      "n": 7
+    },
+    {
+      "neighborhood": "Flatiron / Gramercy",
+      "building_category": "Cultural / Performing",
+      "n": 1
+    },
+    {
+      "neighborhood": "Flatiron / Gramercy",
+      "building_category": "Hospital / Healthcare",
+      "n": 1
+    },
+    {
+      "neighborhood": "Flatiron / Gramercy",
+      "building_category": "Hotel",
+      "n": 6
+    },
+    {
+      "neighborhood": "Flatiron / Gramercy",
+      "building_category": "K-12 School",
+      "n": 5
+    },
+    {
+      "neighborhood": "Flatiron / Gramercy",
+      "building_category": "Multifamily Residential",
+      "n": 41
+    },
+    {
+      "neighborhood": "Flatiron / Gramercy",
+      "building_category": "Office",
+      "n": 38
+    },
+    {
+      "neighborhood": "Flatiron / Gramercy",
+      "building_category": "Other / Mixed",
+      "n": 17
+    },
+    {
+      "neighborhood": "Midtown East / 34-59",
+      "building_category": "College / University",
+      "n": 1
+    },
+    {
+      "neighborhood": "Midtown East / 34-59",
+      "building_category": "Hospital / Healthcare",
+      "n": 1
+    },
+    {
+      "neighborhood": "Midtown East / 34-59",
+      "building_category": "Hotel",
+      "n": 14
+    },
+    {
+      "neighborhood": "Midtown East / 34-59",
+      "building_category": "Multifamily Residential",
+      "n": 80
+    },
+    {
+      "neighborhood": "Midtown East / 34-59",
+      "building_category": "Office",
+      "n": 194
+    },
+    {
+      "neighborhood": "Midtown East / 34-59",
+      "building_category": "Other / Mixed",
+      "n": 19
+    },
+    {
+      "neighborhood": "Midtown West / 34-59",
+      "building_category": "College / University",
+      "n": 1
+    },
+    {
+      "neighborhood": "Midtown West / 34-59",
+      "building_category": "Cultural / Performing",
+      "n": 11
+    },
+    {
+      "neighborhood": "Midtown West / 34-59",
+      "building_category": "Hospital / Healthcare",
+      "n": 1
+    },
+    {
+      "neighborhood": "Midtown West / 34-59",
+      "building_category": "Hotel",
+      "n": 25
+    },
+    {
+      "neighborhood": "Midtown West / 34-59",
+      "building_category": "K-12 School",
+      "n": 2
+    },
+    {
+      "neighborhood": "Midtown West / 34-59",
+      "building_category": "Multifamily Residential",
+      "n": 28
+    },
+    {
+      "neighborhood": "Midtown West / 34-59",
+      "building_category": "Office",
+      "n": 121
+    },
+    {
+      "neighborhood": "Midtown West / 34-59",
+      "building_category": "Other / Mixed",
+      "n": 16
+    },
+    {
+      "neighborhood": "Other Manhattan",
+      "building_category": "Multifamily Residential",
+      "n": 2
+    },
+    {
+      "neighborhood": "Other Manhattan",
+      "building_category": "Office",
+      "n": 39
+    },
+    {
+      "neighborhood": "Other Manhattan",
+      "building_category": "Other / Mixed",
+      "n": 2
+    },
+    {
+      "neighborhood": "Tribeca / SoHo",
+      "building_category": "College / University",
+      "n": 4
+    },
+    {
+      "neighborhood": "Tribeca / SoHo",
+      "building_category": "Cultural / Performing",
+      "n": 1
+    },
+    {
+      "neighborhood": "Tribeca / SoHo",
+      "building_category": "Hotel",
+      "n": 2
+    },
+    {
+      "neighborhood": "Tribeca / SoHo",
+      "building_category": "Multifamily Residential",
+      "n": 10
+    },
+    {
+      "neighborhood": "Tribeca / SoHo",
+      "building_category": "Office",
+      "n": 15
+    },
+    {
+      "neighborhood": "Tribeca / SoHo",
+      "building_category": "Other / Mixed",
+      "n": 5
+    },
+    {
+      "neighborhood": "Upper East Side",
+      "building_category": "College / University",
+      "n": 1
+    },
+    {
+      "neighborhood": "Upper East Side",
+      "building_category": "Cultural / Performing",
+      "n": 6
+    },
+    {
+      "neighborhood": "Upper East Side",
+      "building_category": "Hospital / Healthcare",
+      "n": 4
+    },
+    {
+      "neighborhood": "Upper East Side",
+      "building_category": "Hotel",
+      "n": 4
+    },
+    {
+      "neighborhood": "Upper East Side",
+      "building_category": "K-12 School",
+      "n": 6
+    },
+    {
+      "neighborhood": "Upper East Side",
+      "building_category": "Multifamily Residential",
+      "n": 165
+    },
+    {
+      "neighborhood": "Upper East Side",
+      "building_category": "Office",
+      "n": 8
+    },
+    {
+      "neighborhood": "Upper East Side",
+      "building_category": "Other / Mixed",
+      "n": 22
+    },
+    {
+      "neighborhood": "Upper Manhattan (96th+)",
+      "building_category": "College / University",
+      "n": 23
+    },
+    {
+      "neighborhood": "Upper Manhattan (96th+)",
+      "building_category": "Cultural / Performing",
+      "n": 1
+    },
+    {
+      "neighborhood": "Upper Manhattan (96th+)",
+      "building_category": "Office",
+      "n": 1
+    },
+    {
+      "neighborhood": "Upper Manhattan (96th+)",
+      "building_category": "Other / Mixed",
+      "n": 2
+    },
+    {
+      "neighborhood": "Upper West Side",
+      "building_category": "College / University",
+      "n": 4
+    },
+    {
+      "neighborhood": "Upper West Side",
+      "building_category": "Cultural / Performing",
+      "n": 5
+    },
+    {
+      "neighborhood": "Upper West Side",
+      "building_category": "K-12 School",
+      "n": 3
+    },
+    {
+      "neighborhood": "Upper West Side",
+      "building_category": "Multifamily Residential",
+      "n": 37
+    },
+    {
+      "neighborhood": "Upper West Side",
+      "building_category": "Office",
+      "n": 4
+    },
+    {
+      "neighborhood": "Upper West Side",
+      "building_category": "Other / Mixed",
+      "n": 1
+    }
+  ]
+}

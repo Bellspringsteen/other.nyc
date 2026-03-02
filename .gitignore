@@ -25,6 +25,6 @@ Temporary Items
 .apdisk
 
 # Large data files — download separately (see UWS/README.md)
-UWS/ll84_2022.csv
-UWS/pluto.csv
-UWS/pluto_brooklyn.csv
+UWS/water/ll84_2022.csv
+UWS/water/pluto.csv
+UWS/water/pluto_brooklyn.csv

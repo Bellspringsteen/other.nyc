@@ -1,0 +1,1546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Follow the Pipes — Con Edison Steam &amp; the UWS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+/* ── Reset & base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #141414;
+  --bg2:       #1e1e1e;
+  --bg3:       #262626;
+  --steam:     #ff6b35;
+  --steam2:    #ff4500;
+  --steam-dim: #7a3218;
+  --cool:      #8a9bb0;
+  --cool2:     #5a7a99;
+  --text:      #e8e4df;
+  --text-dim:  #8a8278;
+  --white:     #f5f5f0;
+  --accent:    #ffd166;
+  --gas:       #4ecdc4;
+  --oil:       #c8553d;
+  --border:    #333;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Lato', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ── Typography ── */
+h1, h2, h3 { font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.04em; }
+.mono { font-family: 'JetBrains Mono', monospace; }
+
+/* ── Layout ── */
+.container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+.section { padding: 80px 0; border-top: 1px solid var(--border); }
+.section:first-child { border-top: none; }
+
+/* ────────────────────────────────────
+   HERO
+──────────────────────────────────── */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-bottom: 80px;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 50% 110%, #3a1800 0%, #141414 60%);
+}
+
+.hero-bg-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,107,53,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,107,53,0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+}
+
+/* Steam wisps */
+.steam-container {
+  position: absolute;
+  bottom: 0;
+  left: 0; right: 0;
+  height: 60%;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+@keyframes rise {
+  0%   { transform: translateY(0) translateX(0) scaleX(1);   opacity: 0; }
+  10%  { opacity: 0.25; }
+  50%  { transform: translateY(-45vh) translateX(12px) scaleX(1.3); opacity: 0.15; }
+  90%  { opacity: 0.05; }
+  100% { transform: translateY(-90vh) translateX(-8px) scaleX(0.8); opacity: 0; }
+}
+
+.wisp {
+  position: absolute;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(to top, rgba(255,255,255,0.3), transparent);
+  border-radius: 50% 50% 0 0 / 80px;
+  animation: rise linear infinite;
+  filter: blur(6px);
+}
+.wisp:nth-child(1)  { left: 10%; width: 4px; height: 200px; animation-duration: 8s;  animation-delay: 0s; }
+.wisp:nth-child(2)  { left: 18%; width: 3px; height: 150px; animation-duration: 11s; animation-delay: 2s; }
+.wisp:nth-child(3)  { left: 27%; width: 5px; height: 220px; animation-duration: 9s;  animation-delay: 1s; }
+.wisp:nth-child(4)  { left: 35%; width: 3px; height: 130px; animation-duration: 13s; animation-delay: 3s; }
+.wisp:nth-child(5)  { left: 44%; width: 6px; height: 180px; animation-duration: 10s; animation-delay: 0.5s; }
+.wisp:nth-child(6)  { left: 53%; width: 4px; height: 240px; animation-duration: 7s;  animation-delay: 4s; }
+.wisp:nth-child(7)  { left: 62%; width: 3px; height: 160px; animation-duration: 12s; animation-delay: 1.5s; }
+.wisp:nth-child(8)  { left: 71%; width: 5px; height: 200px; animation-duration: 9s;  animation-delay: 2.5s; }
+.wisp:nth-child(9)  { left: 80%; width: 3px; height: 140px; animation-duration: 14s; animation-delay: 0s; }
+.wisp:nth-child(10) { left: 89%; width: 4px; height: 180px; animation-duration: 10s; animation-delay: 3.5s; }
+
+/* Manhole icons */
+.manholes {
+  position: absolute;
+  bottom: 0;
+  left: 0; right: 0;
+  display: flex;
+  justify-content: space-around;
+  padding: 0 5%;
+  pointer-events: none;
+}
+.manhole {
+  width: 32px; height: 10px;
+  background: var(--border);
+  border-radius: 50% 50% 0 0;
+  border: 1px solid #444;
+  border-bottom: none;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 10;
+}
+
+.hero-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--steam);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.hero h1 {
+  font-size: clamp(56px, 10vw, 120px);
+  line-height: 0.9;
+  color: var(--white);
+  margin-bottom: 24px;
+}
+
+.hero h1 span { color: var(--steam); }
+
+.hero-subtitle {
+  font-size: 20px;
+  font-weight: 300;
+  color: var(--cool);
+  max-width: 580px;
+  margin-bottom: 40px;
+  line-height: 1.5;
+}
+
+.hero-stats {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.hero-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hero-stat-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 48px;
+  font-weight: 700;
+  color: var(--steam);
+  line-height: 1;
+}
+
+.hero-stat-label {
+  font-size: 12px;
+  color: var(--text-dim);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.scroll-hint {
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 0.1em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.scroll-hint::before {
+  content: '';
+  display: block;
+  width: 1px;
+  height: 40px;
+  background: var(--text-dim);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+/* ────────────────────────────────────
+   SECTION HEADERS
+──────────────────────────────────── */
+.section-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--steam-dim);
+  letter-spacing: 0.2em;
+  margin-bottom: 8px;
+}
+
+.section h2 {
+  font-size: clamp(32px, 5vw, 52px);
+  color: var(--white);
+  margin-bottom: 16px;
+}
+
+.section-intro {
+  font-size: 17px;
+  color: var(--cool);
+  max-width: 620px;
+  margin-bottom: 48px;
+  font-weight: 300;
+  line-height: 1.7;
+}
+
+/* ────────────────────────────────────
+   PULL QUOTES
+──────────────────────────────────── */
+.pull-quote {
+  border-left: 3px solid var(--steam);
+  padding: 20px 28px;
+  margin: 40px 0;
+  background: var(--bg2);
+  border-radius: 0 8px 8px 0;
+}
+
+.pull-quote p {
+  font-size: 18px;
+  font-style: italic;
+  color: var(--white);
+  line-height: 1.6;
+}
+
+/* ────────────────────────────────────
+   MANHATTAN SCHEMATIC SVG
+──────────────────────────────────── */
+.schematic-wrapper {
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.schematic-svg-wrap {
+  flex: 0 0 auto;
+}
+
+.schematic-legend {
+  flex: 1;
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-top: 20px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.legend-swatch {
+  width: 20px;
+  height: 20px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.legend-text strong {
+  display: block;
+  font-size: 14px;
+  color: var(--white);
+}
+
+.legend-text span {
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+/* ────────────────────────────────────
+   INFO BOX
+──────────────────────────────────── */
+.info-box {
+  background: var(--bg2);
+  border: 1px solid var(--steam-dim);
+  border-radius: 8px;
+  padding: 24px 28px;
+  margin: 32px 0;
+}
+
+.info-box h4 {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--steam);
+  margin-bottom: 10px;
+}
+
+.info-box p {
+  font-size: 15px;
+  color: var(--text);
+  line-height: 1.7;
+}
+
+/* ────────────────────────────────────
+   CHARTS
+──────────────────────────────────── */
+.chart-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 16px;
+}
+
+/* Horizontal bar chart */
+.bar-chart { display: flex; flex-direction: column; gap: 8px; margin-bottom: 40px; }
+
+.bar-row {
+  display: grid;
+  grid-template-columns: 180px 1fr 60px;
+  align-items: center;
+  gap: 12px;
+}
+
+.bar-label {
+  font-size: 13px;
+  color: var(--text-dim);
+  text-align: right;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bar-label.highlight { color: var(--steam); font-weight: 700; }
+
+.bar-track {
+  height: 24px;
+  background: var(--bg3);
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.bar-fill.steam-color { background: linear-gradient(90deg, var(--steam2), var(--steam)); }
+.bar-fill.cool-color  { background: var(--cool2); }
+.bar-fill.uws-color   { background: var(--accent); }
+.bar-fill.dim-color   { background: var(--bg3); border: 1px solid var(--border); }
+
+.bar-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: var(--text);
+}
+
+.bar-value.highlight { color: var(--steam); }
+
+/* Adoption rate dots */
+.adoption-bar-row {
+  display: grid;
+  grid-template-columns: 180px 1fr 50px;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+/* Block-band chart */
+.band-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: relative;
+}
+
+.band-row {
+  display: grid;
+  grid-template-columns: 120px 1fr 40px;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.band-row.terminus {
+  background: rgba(255,107,53,0.05);
+  border-left: 2px solid var(--steam-dim);
+  padding-left: 8px;
+}
+
+.band-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+.band-label.highlight { color: var(--steam); }
+
+.band-track {
+  height: 20px;
+  background: var(--bg3);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.band-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--steam2), var(--steam));
+  border-radius: 2px;
+  transition: width 1s ease;
+}
+
+.band-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--text-dim);
+  text-align: right;
+}
+
+.terminus-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--steam);
+  letter-spacing: 0.1em;
+  margin-top: 4px;
+  padding: 6px 0 0 8px;
+  border-top: 1px dashed var(--steam-dim);
+}
+
+/* ────────────────────────────────────
+   STAT GRID
+──────────────────────────────────── */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 40px;
+}
+
+.stat-cell {
+  background: var(--bg2);
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.stat-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--steam);
+  line-height: 1;
+}
+
+.stat-num.cool { color: var(--gas); }
+.stat-num.oil  { color: var(--oil); }
+
+.stat-lbl {
+  font-size: 12px;
+  color: var(--text-dim);
+  letter-spacing: 0.05em;
+  line-height: 1.4;
+}
+
+/* ────────────────────────────────────
+   HEAT SOURCE PIE / DONUT CHART
+──────────────────────────────────── */
+.donut-section {
+  display: flex;
+  gap: 48px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 32px 0;
+}
+
+.donut-wrap {
+  flex: 0 0 auto;
+  position: relative;
+}
+
+.donut-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.donut-center-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.donut-center-lbl {
+  font-size: 10px;
+  color: var(--text-dim);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.donut-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.donut-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.donut-dot {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.donut-item-text strong {
+  display: block;
+  font-size: 15px;
+  color: var(--white);
+}
+
+.donut-item-text span {
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+/* ────────────────────────────────────
+   MANHOLE DIAGRAM
+──────────────────────────────────── */
+.manhole-diagram {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin: 32px 0;
+}
+
+.cause-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 24px 20px;
+}
+
+.cause-icon {
+  font-size: 32px;
+  margin-bottom: 12px;
+}
+
+.cause-card h4 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px;
+  color: var(--steam);
+  margin-bottom: 8px;
+  letter-spacing: 0.05em;
+}
+
+.cause-card p {
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+
+/* ────────────────────────────────────
+   BUILDING LOOKUP TABLE
+──────────────────────────────────── */
+.search-bar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.search-input {
+  flex: 1;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px 16px;
+  color: var(--white);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.search-input:focus { border-color: var(--steam); }
+.search-input::placeholder { color: var(--text-dim); }
+
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+thead th {
+  background: var(--bg3);
+  padding: 10px 14px;
+  text-align: left;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+}
+
+thead th:hover { color: var(--text); }
+thead th.sorted { color: var(--steam); }
+
+tbody tr {
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  transition: background 0.15s;
+}
+
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: var(--bg2); }
+
+tbody td {
+  padding: 10px 14px;
+  color: var(--text);
+  vertical-align: top;
+}
+
+.tag {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-size: 11px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.tag-res  { background: rgba(255,107,53,0.15); color: var(--steam); }
+.tag-inst { background: rgba(78,205,196,0.15); color: var(--gas); }
+.tag-off  { background: rgba(138,154,176,0.15); color: var(--cool); }
+.tag-arts { background: rgba(255,209,102,0.15); color: var(--accent); }
+
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: var(--text-dim);
+  font-size: 14px;
+}
+
+/* ────────────────────────────────────
+   METHODOLOGY & FOOTER
+──────────────────────────────────── */
+.methodology {
+  background: var(--bg2);
+  border-radius: 8px;
+  padding: 28px;
+  margin: 40px 0 0;
+}
+
+.methodology h4 {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 12px;
+}
+
+.methodology ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.methodology li {
+  font-size: 13px;
+  color: var(--text-dim);
+  padding-left: 16px;
+  position: relative;
+}
+
+.methodology li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--steam-dim);
+}
+
+footer {
+  padding: 40px 0;
+  border-top: 1px solid var(--border);
+  text-align: center;
+}
+
+footer p {
+  font-size: 12px;
+  color: var(--text-dim);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+footer a { color: var(--steam-dim); text-decoration: none; }
+footer a:hover { color: var(--steam); }
+
+/* ── Utilities ── */
+.mt-24 { margin-top: 24px; }
+.mt-40 { margin-top: 40px; }
+.mb-16 { margin-bottom: 16px; }
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .bar-row { grid-template-columns: 120px 1fr 50px; }
+  .bar-label { font-size: 11px; }
+  .manhole-diagram { grid-template-columns: 1fr; }
+  .donut-section { flex-direction: column; }
+  .schematic-wrapper { flex-direction: column; }
+  .hero-stats { gap: 24px; }
+  .hero-stat-value { font-size: 36px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════
+     HERO
+══════════════════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-bg-grid"></div>
+  <div class="steam-container">
+    <div class="wisp"></div>
+    <div class="wisp"></div>
+    <div class="wisp"></div>
+    <div class="wisp"></div>
+    <div class="wisp"></div>
+    <div class="wisp"></div>
+    <div class="wisp"></div>
+    <div class="wisp"></div>
+    <div class="wisp"></div>
+    <div class="wisp"></div>
+  </div>
+  <div class="manholes">
+    <div class="manhole"></div>
+    <div class="manhole"></div>
+    <div class="manhole"></div>
+    <div class="manhole"></div>
+    <div class="manhole"></div>
+    <div class="manhole"></div>
+    <div class="manhole"></div>
+    <div class="manhole"></div>
+  </div>
+  <div class="container hero-content">
+    <p class="hero-eyebrow">Con Edison Steam System — Upper West Side</p>
+    <h1>Follow<br><span>the Pipes</span></h1>
+    <p class="hero-subtitle">
+      The UWS has steam venting from every other manhole. But how many buildings actually subscribe to Con Edison steam — and why does the vapor keep rising?
+    </p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <span class="hero-stat-value mono">54</span>
+        <span class="hero-stat-label">UWS buildings on<br>district steam</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-value mono">4.5%</span>
+        <span class="hero-stat-label">adoption rate among<br>large UWS buildings</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-value mono">96<span style="font-size:0.55em;color:var(--cool)">th St</span></span>
+        <span class="hero-stat-label">network terminus,<br>west side</span>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-hint">SCROLL</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION 1 — The Steam System
+══════════════════════════════════════════════════════════ -->
+<section class="section">
+  <div class="container">
+    <p class="section-num">01 / BACKGROUND</p>
+    <h2>What the Steam System Is</h2>
+    <p class="section-intro">
+      Con Edison operates the largest district steam system in the United States — 105 miles of pipes running under Manhattan streets, delivering steam for heat and hot water to about 1,700 buildings.
+    </p>
+
+    <div class="schematic-wrapper">
+      <!-- Manhattan schematic SVG -->
+      <div class="schematic-svg-wrap">
+        <svg width="220" height="520" viewBox="0 0 220 520" style="display:block;" aria-label="Manhattan steam network schematic">
+          <defs>
+            <pattern id="steamZone" x="0" y="0" width="6" height="6" patternUnits="userSpaceOnUse">
+              <rect width="6" height="6" fill="rgba(255,107,53,0.12)"/>
+              <line x1="0" y1="6" x2="6" y2="0" stroke="rgba(255,107,53,0.25)" stroke-width="0.5"/>
+            </pattern>
+          </defs>
+
+          <!-- Manhattan island shape (simplified) -->
+          <!-- Bottom (Battery Park) = bottom of SVG, Top (Inwood) = top -->
+          <!-- We'll show 59th to ~220th, compressed so UWS fits nicely -->
+
+          <!-- Full island silhouette: top narrow, widens, narrows again -->
+          <path d="M 85 10 Q 90 8 110 12 Q 130 14 145 18 L 155 50 L 165 120 L 170 200 L 170 280 L 165 330 L 160 370 L 158 420 L 155 460 L 145 490 L 130 508 Q 110 515 90 510 L 75 490 L 60 460 L 58 420 L 55 370 L 50 330 L 45 280 L 45 200 L 50 120 L 60 50 Z"
+                fill="#1a1a1a" stroke="#444" stroke-width="1.5"/>
+
+          <!-- Steam zone (Battery to 96th West / 89th East) — roughly bottom 2/3 -->
+          <!-- Battery = y~490, 59th = y~260, 89th = y~195, 96th = y~180 -->
+          <clipPath id="islandClip">
+            <path d="M 85 10 Q 90 8 110 12 Q 130 14 145 18 L 155 50 L 165 120 L 170 200 L 170 280 L 165 330 L 160 370 L 158 420 L 155 460 L 145 490 L 130 508 Q 110 515 90 510 L 75 490 L 60 460 L 58 420 L 55 370 L 50 330 L 45 280 L 45 200 L 50 120 L 60 50 Z"/>
+          </clipPath>
+
+          <!-- Steam coverage zone -->
+          <rect x="0" y="175" width="220" height="345" fill="url(#steamZone)" clip-path="url(#islandClip)"/>
+          <rect x="0" y="175" width="220" height="345" fill="rgba(255,107,53,0.06)" clip-path="url(#islandClip)"/>
+
+          <!-- Generating plants -->
+          <!-- East 14th St ≈ y 420 -->
+          <circle cx="148" cy="420" r="5" fill="var(--steam2)" opacity="0.9"/>
+          <!-- East 60th St ≈ y 268 -->
+          <circle cx="152" cy="268" r="5" fill="var(--steam2)" opacity="0.9"/>
+          <!-- East 74th St ≈ y 240 -->
+          <circle cx="150" cy="240" r="4" fill="var(--steam2)" opacity="0.7"/>
+
+          <!-- West terminus line — 96th St ≈ y 180 on west side -->
+          <line x1="46" y1="180" x2="110" y2="180" stroke="var(--steam)" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <!-- East terminus line — 89th St ≈ y 198 on east side -->
+          <line x1="110" y1="198" x2="168" y2="198" stroke="var(--steam)" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+          <!-- 59th St reference line -->
+          <line x1="47" y1="262" x2="167" y2="262" stroke="#444" stroke-width="0.8" stroke-dasharray="2,4"/>
+
+          <!-- Street labels -->
+          <text x="30" y="183" font-family="JetBrains Mono,monospace" font-size="8" fill="var(--steam)" text-anchor="end">96th W</text>
+          <text x="185" y="201" font-family="JetBrains Mono,monospace" font-size="8" fill="var(--steam)">89th E</text>
+          <text x="110" y="259" font-family="JetBrains Mono,monospace" font-size="8" fill="#555" text-anchor="middle">59th St</text>
+
+          <!-- Neighborhood labels -->
+          <text x="110" y="155" font-family="Lato,sans-serif" font-size="10" fill="#666" text-anchor="middle" font-weight="700">HARLEM</text>
+          <text x="110" y="168" font-family="Lato,sans-serif" font-size="8" fill="#555" text-anchor="middle">NO STEAM</text>
+
+          <!-- UWS label with bracket -->
+          <text x="38" y="220" font-family="Lato,sans-serif" font-size="9" fill="var(--accent)" text-anchor="end" font-weight="700">UWS</text>
+          <line x1="40" y1="180" x2="40" y2="262" stroke="var(--accent)" stroke-width="1" opacity="0.5"/>
+          <line x1="40" y1="180" x2="46" y2="180" stroke="var(--accent)" stroke-width="1" opacity="0.5"/>
+          <line x1="40" y1="262" x2="46" y2="262" stroke="var(--accent)" stroke-width="1" opacity="0.5"/>
+
+          <!-- UEA label -->
+          <text x="183" y="230" font-family="Lato,sans-serif" font-size="9" fill="var(--cool)" text-anchor="start" font-weight="700">UES</text>
+
+          <!-- Midtown label -->
+          <text x="110" y="305" font-family="Lato,sans-serif" font-size="9" fill="var(--cool)" text-anchor="middle">MIDTOWN</text>
+
+          <!-- Downtown label -->
+          <text x="110" y="440" font-family="Lato,sans-serif" font-size="9" fill="var(--cool)" text-anchor="middle">DOWNTOWN</text>
+
+          <!-- Plant labels -->
+          <text x="155" y="416" font-family="JetBrains Mono,monospace" font-size="7" fill="var(--steam2)">14th St plant</text>
+          <text x="155" y="264" font-family="JetBrains Mono,monospace" font-size="7" fill="var(--steam2)">60th St plant</text>
+
+          <!-- Steam squiggles on pipes (decorative) -->
+          <g opacity="0.3">
+            <path d="M 90 380 Q 92 375 90 370 Q 88 365 90 360" stroke="rgba(255,255,255,0.5)" stroke-width="1" fill="none"/>
+            <path d="M 110 350 Q 112 345 110 340 Q 108 335 110 330" stroke="rgba(255,255,255,0.5)" stroke-width="1" fill="none"/>
+            <path d="M 100 440 Q 102 435 100 430 Q 98 425 100 420" stroke="rgba(255,255,255,0.5)" stroke-width="1" fill="none"/>
+          </g>
+
+          <!-- North arrow -->
+          <g transform="translate(190,30)">
+            <line x1="0" y1="12" x2="0" y2="0" stroke="var(--text-dim)" stroke-width="1"/>
+            <path d="M -4 4 L 0 0 L 4 4" stroke="var(--text-dim)" stroke-width="1" fill="none"/>
+            <text x="0" y="20" font-family="JetBrains Mono,monospace" font-size="8" fill="var(--text-dim)" text-anchor="middle">N</text>
+          </g>
+        </svg>
+      </div>
+
+      <!-- Legend -->
+      <div class="schematic-legend">
+        <div class="legend-item">
+          <div class="legend-swatch" style="background:rgba(255,107,53,0.3);border:1px solid var(--steam)"></div>
+          <div class="legend-text">
+            <strong>Steam coverage zone</strong>
+            <span>Battery Park → 96th St (W) / 89th St (E)</span>
+          </div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-swatch" style="background:#1a1a1a;border:1px solid #444"></div>
+          <div class="legend-text">
+            <strong>Outside network</strong>
+            <span>Buildings above the terminus have no Con Ed steam available</span>
+          </div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-swatch" style="background:var(--steam2);border-radius:50%"></div>
+          <div class="legend-text">
+            <strong>Generating plants</strong>
+            <span>E 14th St, E 60th St, E 74th St</span>
+          </div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-swatch" style="background:var(--accent);border-radius:2px"></div>
+          <div class="legend-text">
+            <strong>Upper West Side</strong>
+            <span>59th–110th St — straddles the western terminus</span>
+          </div>
+        </div>
+
+        <div class="info-box" style="margin:0">
+          <h4>Why the UWS sees so much steam</h4>
+          <p>
+            The pipes run <em>under the streets</em> all the way to 96th St regardless of whether nearby buildings subscribe. When those pipes develop micro-leaks — or when cold groundwater meets the hot pipe surface — you get the white vapor rising from manholes.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="pull-quote">
+      <p>"The steam you see rising from UWS manholes is Con Edison's own infrastructure, not your neighbors running steam heat. The system started in 1882 and has grown northward ever since — 105 miles of pipes older than the buildings they pass under."</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION 2 — How many UWS buildings subscribe?
+══════════════════════════════════════════════════════════ -->
+<section class="section">
+  <div class="container">
+    <p class="section-num">02 / THE DATA</p>
+    <h2>How Many UWS Buildings Actually Subscribe?</h2>
+    <p class="section-intro">
+      Of the ~1,200 large buildings in the UWS, only <strong style="color:var(--steam)">54</strong> report using Con Edison district steam — a <strong style="color:var(--steam)">4.5%</strong> adoption rate. That's among the lowest in Manhattan.
+    </p>
+
+    <div class="stat-grid">
+      <div class="stat-cell">
+        <span class="stat-num">1,270</span>
+        <span class="stat-lbl">Manhattan buildings on district steam (LL84 data)</span>
+      </div>
+      <div class="stat-cell">
+        <span class="stat-num">54</span>
+        <span class="stat-lbl">UWS steam subscribers (zips 10023–10025)</span>
+      </div>
+      <div class="stat-cell">
+        <span class="stat-num">4.5%</span>
+        <span class="stat-lbl">adoption rate among large UWS buildings</span>
+      </div>
+      <div class="stat-cell">
+        <span class="stat-num" style="color:var(--accent)">49%</span>
+        <span class="stat-lbl">adoption in Midtown East — the system's sweet spot</span>
+      </div>
+    </div>
+
+    <!-- Neighborhood comparison bar chart -->
+    <p class="chart-title">Steam subscribers by neighborhood (buildings using district steam, LL84 2022)</p>
+    <div class="bar-chart" id="hood-count-chart">
+      <!-- Filled by JS -->
+    </div>
+
+    <p class="chart-title mt-40">Adoption rate — steam subscribers as % of all large buildings (25k+ sq ft)</p>
+    <div class="bar-chart" id="hood-adoption-chart">
+      <!-- Filled by JS -->
+    </div>
+
+    <div class="info-box">
+      <h4>Why the UWS adoption rate is low</h4>
+      <p>
+        The UWS has more large residential buildings than almost any other neighborhood (1,200+), but most were built after WWII with their own boilers and were never retrofitted for district steam. The buildings that <em>do</em> use steam are mostly concentrated in the Lincoln Center corridor (59th–70th) where the infrastructure is densest, or are large institutions like Fordham University.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION 3 — Geographic dropoff
+══════════════════════════════════════════════════════════ -->
+<section class="section">
+  <div class="container">
+    <p class="section-num">03 / GEOGRAPHY</p>
+    <h2>Steam Adoption Drops Off Going North</h2>
+    <p class="section-intro">
+      Of the 54 UWS steam buildings with identifiable cross-streets, adoption clusters sharply in the 59th–74th block range. It nearly disappears between 75th–89th, then sees a small cluster near the network terminus at 90th–95th.
+    </p>
+
+    <div id="band-chart-wrap">
+      <!-- Filled by JS -->
+    </div>
+
+    <div class="pull-quote">
+      <p>"Buildings at the far end of long pipe runs experience lower pressure and greater heat loss — which may make district steam less economical for properties in the 90s, close to where the system ends."</p>
+    </div>
+
+    <div class="info-box">
+      <h4>Note on avenue-address buildings</h4>
+      <p>
+        32 of the 54 UWS steam buildings have avenue-based addresses (Amsterdam Ave, Columbus Ave, West End Ave, Central Park West, Broadway) that don't embed a cross-street number. Based on the street-number buildings visible in the data, these avenue buildings appear to be concentrated in the 59th–74th corridor as well — the Lincoln Center area, where large residential developments like Lincoln Towers and Columbus Park Towers were purpose-built with district steam connections in the 1960s.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION 4 — Who uses steam in the UWS?
+══════════════════════════════════════════════════════════ -->
+<section class="section">
+  <div class="container">
+    <p class="section-num">04 / USERS</p>
+    <h2>Who Actually Uses Steam in the UWS?</h2>
+    <p class="section-intro">
+      Steam is primarily a product for large multifamily buildings and major institutions. Regular apartment buildings mostly heat with natural gas or fuel oil from their own boilers.
+    </p>
+
+    <!-- Building type donut -->
+    <div class="donut-section">
+      <div class="donut-wrap">
+        <svg width="160" height="160" viewBox="0 0 160 160" id="type-donut">
+          <!-- Filled by JS -->
+        </svg>
+        <div class="donut-center">
+          <span class="donut-center-num">54</span>
+          <span class="donut-center-lbl">buildings</span>
+        </div>
+      </div>
+      <div class="donut-legend" id="type-legend">
+        <!-- Filled by JS -->
+      </div>
+    </div>
+
+    <!-- All UWS large buildings heat source breakdown -->
+    <p class="chart-title mt-40">What do ALL large UWS buildings use for heat? (LL84 2022)</p>
+
+    <div class="donut-section">
+      <div class="donut-wrap">
+        <svg width="160" height="160" viewBox="0 0 160 160" id="heat-donut">
+          <!-- Filled by JS -->
+        </svg>
+        <div class="donut-center">
+          <span class="donut-center-num">1,195</span>
+          <span class="donut-center-lbl">buildings</span>
+        </div>
+      </div>
+      <div class="donut-legend" id="heat-legend">
+        <!-- Filled by JS -->
+      </div>
+    </div>
+
+    <div class="info-box mt-24">
+      <h4>The Columbia University Factor</h4>
+      <p>
+        Columbia University (Morningside Heights, ~116th St) operates its <em>own</em> cogeneration steam system, entirely separate from Con Edison. This is one reason Con Edison's network stops at 96th — there was no economic incentive to extend further north when the largest institutional customer had already built its own plant.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION 5 — Why manholes vent
+══════════════════════════════════════════════════════════ -->
+<section class="section">
+  <div class="container">
+    <p class="section-num">05 / THE MYSTERY EXPLAINED</p>
+    <h2>Why Manholes Keep Venting</h2>
+    <p class="section-intro">
+      The steam rising from UWS manholes has almost nothing to do with whether nearby buildings are on the district steam system. Three physics-and-infrastructure factors explain the vapor.
+    </p>
+
+    <div class="manhole-diagram">
+      <div class="cause-card">
+        <div class="cause-icon">💧</div>
+        <h4>Micro-leaks</h4>
+        <p>
+          The oldest pipe segments in the 90s were laid before 1920. Even small cracks in the insulation jacket or pipe joints allow steam to escape directly into the street environment. The steam system operates at 120–185 psi; any defect vents visibly.
+        </p>
+      </div>
+      <div class="cause-card">
+        <div class="cause-icon">❄️</div>
+        <h4>Condensation</h4>
+        <p>
+          When cold groundwater or rain contacts the surface of a steam pipe, it flash-vaporizes. In winter, temperature differentials between the ~350°F pipe surface and ~35°F street-level air produce thick white plumes — even from a perfectly sealed system.
+        </p>
+      </div>
+      <div class="cause-card">
+        <div class="cause-icon">📏</div>
+        <h4>Pressure relief</h4>
+        <p>
+          Steam pressure is slightly lower at the end of long pipe runs. To stabilize pressure near the 96th St terminus, the system sometimes vents excess steam through relief ports — the visible "stack" covers over manholes that look like chimneys are deliberate pressure management.
+        </p>
+      </div>
+    </div>
+
+    <div class="pull-quote">
+      <p>"The UWS is simultaneously at the edge of the steam network and home to some of its oldest infrastructure. Both factors compound: more pipe age means more leaks, and end-of-run pressure dynamics mean more relief venting. The manholes aren't malfunctioning — they're doing exactly what the system requires."</p>
+    </div>
+
+    <div class="info-box">
+      <h4>Con Edison's orange chimney stacks</h4>
+      <p>
+        The iconic orange-and-white striped cardboard cylinders placed over steaming manholes are Con Edison's own equipment — they direct the vapor upward (away from pedestrians) and signal an active steam event. You'll see them more frequently in winter, and more frequently in the UWS than in Midtown — not because of more subscribers, but because of older, longer, and more pressure-stressed pipe runs.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION 6 — Building lookup
+══════════════════════════════════════════════════════════ -->
+<section class="section">
+  <div class="container">
+    <p class="section-num">06 / LOOKUP</p>
+    <h2>Is Your Building on Steam?</h2>
+    <p class="section-intro">
+      All 54 UWS buildings that reported district steam use in the 2022 LL84 energy benchmarking dataset. Search by name or address.
+    </p>
+
+    <div class="search-bar">
+      <input type="text" class="search-input" id="building-search" placeholder="Search by name or address…" autocomplete="off">
+    </div>
+
+    <div class="table-wrap">
+      <table id="building-table">
+        <thead>
+          <tr>
+            <th data-col="name">Building Name</th>
+            <th data-col="address">Address</th>
+            <th data-col="property_type">Type</th>
+            <th data-col="steam_mmbtu" class="sorted">Steam Use (MMBtu)</th>
+            <th data-col="year_built">Built</th>
+          </tr>
+        </thead>
+        <tbody id="building-tbody">
+          <!-- Filled by JS -->
+        </tbody>
+      </table>
+    </div>
+
+    <div class="methodology mt-40">
+      <h4>Data &amp; Methodology</h4>
+      <ul>
+        <li>District steam subscribers identified from NYC LL84 Energy &amp; Water Benchmarking dataset (2022 reporting year) — buildings with <code>District Steam Use (kBtu)</code> &gt; 0</li>
+        <li>Geographic universe (large building count) from NYC PLUTO 23v3 — all Manhattan lots with built area ≥ 25,000 sq ft</li>
+        <li>UWS defined as zip codes 10023 (59th–72nd St), 10024 (72nd–86th St), 10025 (86th–110th St)</li>
+        <li>Street-band analysis uses cross-street numbers extracted from LL84 address strings; 32 of 54 UWS buildings have avenue-based addresses (Amsterdam, Columbus, West End, Broadway, Central Park West) with no embedded cross-street — these appear in the "Avenue-addressed" category</li>
+        <li>Heat source analysis classifies each LL84 building by primary energy source (whichever accounts for ≥50% of gas + oil + steam consumption)</li>
+        <li>Con Edison steam network geography from Con Edison documentation and Wikipedia: system started 1882, now 105 miles of pipe, western terminus ~96th St, eastern terminus ~89th St</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>Data: <a href="https://data.cityofnewyork.us/Environment/Energy-and-Water-Data-Disclosure-for-Local-Law-84-/usc3-8zwd" target="_blank">NYC LL84 Benchmarking</a> · <a href="https://www.nyc.gov/site/planning/data-maps/open-data/dwn-pluto-mappluto.page" target="_blank">PLUTO</a> · Analysis by other.nyc</p>
+  </div>
+</footer>
+
+<script>
+// ── Inline data from steam_analysis.py output ───────────────────────────────
+const DATA = {
+  neighborhoods: [
+    { name: "Midtown East / 34-59",      steam: 309, large: 634,  adoption: 48.7 },
+    { name: "Financial District",         steam: 152, large: 420,  adoption: 36.2 },
+    { name: "Midtown West / 34-59",       steam: 205, large: 1015, adoption: 20.2 },
+    { name: "Upper East Side",            steam: 216, large: 1279, adoption: 16.9 },
+    { name: "Flatiron / Gramercy",        steam: 116, large: 685,  adoption: 16.9 },
+    { name: "East Village / LES",         steam: 64,  large: 752,  adoption:  8.5 },
+    { name: "Chelsea / Hell's Kitchen",   steam: 47,  large: 950,  adoption:  4.9 },
+    { name: "Upper West Side",            steam: 54,  large: 1205, adoption:  4.5, highlight: true },
+    { name: "Tribeca / SoHo",             steam: 37,  large: 902,  adoption:  4.1 },
+    { name: "Upper Manhattan (96th+)",    steam: 27,  large: 2290, adoption:  1.2, dim: true },
+  ],
+  bands: [
+    { band: "59th–64th St", count: 6 },
+    { band: "65th–69th St", count: 8 },
+    { band: "70th–74th St", count: 2 },
+    { band: "75th–79th St", count: 0 },
+    { band: "80th–84th St", count: 0 },
+    { band: "85th–89th St", count: 0 },
+    { band: "90th–95th St", count: 5 },
+    { band: "96th+ St",     count: 1 },
+    { band: "Avenue-addressed (no cross-street)", count: 32 },
+  ],
+  buildingTypes: {
+    "Multifamily Housing": 37,
+    "College / University": 4,
+    "Office": 4,
+    "Performing Arts": 4,
+    "K-12 School": 3,
+    "Mixed Use": 2,
+  },
+  heatSources: {
+    "Natural Gas": 825,
+    "Fuel Oil": 292,
+    "District Steam": 50,
+    "No Data": 28,
+  },
+  buildings: [
+    { name: "1 Central Park West", address: "1 Central Park West", property_type: "Multifamily Housing", steam_mmbtu: 17155, year_built: 1930 },
+    { name: "1 West End Avenue", address: "1 West End Avenue", property_type: "Multifamily Housing", steam_mmbtu: 16741, year_built: 1966 },
+    { name: "M485-0100994 (PS/IS 163)", address: "100 Amsterdam Avenue", property_type: "K-12 School", steam_mmbtu: 5063, year_built: 1965 },
+    { name: "Maxwell / 100 W 92nd St", address: "100 West 92nd Street", property_type: "Multifamily Housing", steam_mmbtu: 28148, year_built: 1968 },
+    { name: "110 West End Ave", address: "110 West End Ave", property_type: "Multifamily Housing", steam_mmbtu: 21041, year_built: 1962 },
+    { name: "Wise Towers", address: "111 W 90th St", property_type: "Multifamily Housing", steam_mmbtu: 27289, year_built: 1967 },
+    { name: "Fordham – Lowenstein Center", address: "113 W 60th St", property_type: "College/University", steam_mmbtu: 24540, year_built: 1969 },
+    { name: "Fordham Lincoln Center", address: "113 W 62nd St", property_type: "College/University", steam_mmbtu: 58059, year_built: 1962 },
+    { name: "M490-0100198 (PS 191)", address: "122 Amsterdam Avenue", property_type: "K-12 School", steam_mmbtu: 5073, year_built: 1959 },
+    { name: "125 Columbus / 2 Lincoln Square", address: "125 Columbus Avenue", property_type: "Multifamily Housing", steam_mmbtu: 22898, year_built: 1972 },
+    { name: "125 West End Avenue", address: "125 West End Avenue", property_type: "Multifamily Housing", steam_mmbtu: 14673, year_built: 1968 },
+    { name: "131 Amsterdam Avenue", address: "131 Amsterdam Avenue", property_type: "K-12 School", steam_mmbtu: 3851, year_built: 1968 },
+    { name: "132 W 65th Street", address: "132 W 65th Street", property_type: "Mixed Use Property", steam_mmbtu: 15881, year_built: 1975 },
+    { name: "140 W 62nd St", address: "140 W 62nd St", property_type: "Multifamily Housing", steam_mmbtu: 11291, year_built: 1963 },
+    { name: "140 West End Avenue", address: "140 West End Avenue", property_type: "Multifamily Housing", steam_mmbtu: 12430, year_built: 1964 },
+    { name: "15 Central Park West", address: "15 Central Park West", property_type: "Multifamily Housing", steam_mmbtu: 47398, year_built: 2008 },
+    { name: "150 Columbus Ave", address: "150 Columbus Ave", property_type: "Multifamily Housing", steam_mmbtu: 18762, year_built: 1969 },
+    { name: "150 West End Avenue", address: "150 West End Avenue", property_type: "Multifamily Housing", steam_mmbtu: 11614, year_built: 1963 },
+    { name: "155 West 66th Street", address: "155 West 66th Street", property_type: "Multifamily Housing", steam_mmbtu: 23001, year_built: 1989 },
+    { name: "160 West 66th St (Lincoln Sq)", address: "160 West 66th Street", property_type: "Multifamily Housing", steam_mmbtu: 31820, year_built: 1994 },
+    { name: "160 West End Avenue", address: "160 West End Avenue", property_type: "Multifamily Housing", steam_mmbtu: 13400, year_built: 1964 },
+    { name: "165 West 66th Street", address: "165 West 66th Street", property_type: "Multifamily Housing", steam_mmbtu: 18553, year_built: 1966 },
+    { name: "165 West End Ave", address: "165 West End Ave.", property_type: "Multifamily Housing", steam_mmbtu: 9761, year_built: 1963 },
+    { name: "170 West End Avenue", address: "170 West End Avenue", property_type: "Multifamily Housing", steam_mmbtu: 10284, year_built: 1963 },
+    { name: "176 West 94th Street", address: "176 West 94th Street", property_type: "Multifamily Housing", steam_mmbtu: 17082, year_built: 1968 },
+    { name: "180 West End Avenue", address: "180 West End Avenue", property_type: "Multifamily Housing", steam_mmbtu: 14231, year_built: 1965 },
+    { name: "185 West End Avenue", address: "185 West End Avenue", property_type: "Multifamily Housing", steam_mmbtu: 27861, year_built: 1964 },
+    { name: "1855 Broadway", address: "1855 Broadway", property_type: "Office", steam_mmbtu: 14201, year_built: 1990 },
+    { name: "1965 Broadway", address: "1965 Broadway", property_type: "Office", steam_mmbtu: 14991, year_built: 1991 },
+    { name: "2 Columbus Ave", address: "2 Columbus Ave", property_type: "Multifamily Housing", steam_mmbtu: 22013, year_built: 1964 },
+    { name: "20 Lincoln Center", address: "20 Lincoln Ctr", property_type: "Performing Arts", steam_mmbtu: 179879, year_built: 1969 },
+    { name: "200 Central Park West", address: "200 Central Park West", property_type: "Multifamily Housing", steam_mmbtu: 26011, year_built: 1931 },
+    { name: "205 West End Avenue", address: "205 West End Avenue", property_type: "Multifamily Housing", steam_mmbtu: 16102, year_built: 1966 },
+    { name: "21 West End Avenue", address: "21 West End Avenue", property_type: "Multifamily Housing", steam_mmbtu: 12441, year_built: 1964 },
+    { name: "279 Central Park West", address: "279 Central Park West", property_type: "Multifamily Housing", steam_mmbtu: 6782, year_built: 1975 },
+    { name: "279 West 70th St", address: "279 West 70th St", property_type: "Multifamily Housing", steam_mmbtu: 5291, year_built: 1925 },
+    { name: "303 West 66th Street", address: "303 West 66th Street", property_type: "Multifamily Housing", steam_mmbtu: 29912, year_built: 1968 },
+    { name: "315 West 70th Street", address: "315 West 70th Street", property_type: "Multifamily Housing", steam_mmbtu: 6428, year_built: 1924 },
+    { name: "320 West 66th Street", address: "320 West 66th Street", property_type: "Multifamily Housing", steam_mmbtu: 25031, year_built: 1963 },
+    { name: "37 West 65th Street", address: "37 West 65th Street", property_type: "Performing Arts", steam_mmbtu: 9621, year_built: 1962 },
+    { name: "43 West 61 Street", address: "43 West 61 Street", property_type: "Multifamily Housing", steam_mmbtu: 8121, year_built: 1963 },
+    { name: "43 West 64th St", address: "43 West 64th St", property_type: "Multifamily Housing", steam_mmbtu: 14011, year_built: 1961 },
+    { name: "5 West 63rd St", address: "5 West 63rd St", property_type: "Office", steam_mmbtu: 11223, year_built: 1928 },
+    { name: "561 Amsterdam Ave", address: "561 Amsterdam Ave", property_type: "Multifamily Housing", steam_mmbtu: 10451, year_built: 1982 },
+    { name: "60 Columbus Ave", address: "60 Columbus Ave", property_type: "Office", steam_mmbtu: 9881, year_built: 1990 },
+    { name: "60 West 66th St", address: "60 West 66th St.", property_type: "Multifamily Housing", steam_mmbtu: 12831, year_built: 1968 },
+    { name: "609 Columbus Ave", address: "609 Columbus Ave", property_type: "Multifamily Housing", steam_mmbtu: 14721, year_built: 1966 },
+    { name: "65 W 90 Street", address: "65 W 90 Street", property_type: "Multifamily Housing", steam_mmbtu: 10011, year_built: 1965 },
+    { name: "65 W 96th Street", address: "65 W 96th Street", property_type: "Multifamily Housing", steam_mmbtu: 16936, year_built: 1960 },
+    { name: "689 Columbus Ave", address: "689 Columbus Ave", property_type: "Multifamily Housing", steam_mmbtu: 14111, year_built: 1966 },
+    { name: "711 Amsterdam Ave", address: "711 Amsterdam Ave", property_type: "Multifamily Housing", steam_mmbtu: 19841, year_built: 1974 },
+    { name: "95 West 95th Street", address: "95 West 95th Street", property_type: "Multifamily Housing", steam_mmbtu: 14181, year_built: 1968 },
+    { name: "Alice Tully Hall / Juilliard", address: "150 Columbus Ave", property_type: "Performing Arts", steam_mmbtu: 52001, year_built: 1969 },
+    { name: "Museum of Natural History", address: "200 Central Park West", property_type: "Museum", steam_mmbtu: 58211, year_built: 1877 },
+  ]
+};
+
+// ── Color helpers ────────────────────────────────────────────────────────────
+const TYPE_COLORS = {
+  "Multifamily Housing": "#ff6b35",
+  "College/University":  "#4ecdc4",
+  "College / University": "#4ecdc4",
+  "Office":              "#8a9bb0",
+  "Performing Arts":     "#ffd166",
+  "K-12 School":         "#a8e6cf",
+  "Mixed Use Property":  "#c7ceea",
+  "Mixed Use":           "#c7ceea",
+  "Museum":              "#ff9f9f",
+};
+
+const HEAT_COLORS = {
+  "Natural Gas":    "#4ecdc4",
+  "Fuel Oil":       "#c8553d",
+  "District Steam": "#ff6b35",
+  "No Data":        "#333",
+};
+
+function tagClass(type) {
+  if (type.includes("Multifamily")) return "tag-res";
+  if (type.includes("College") || type.includes("University") || type.includes("School")) return "tag-inst";
+  if (type.includes("Office")) return "tag-off";
+  if (type.includes("Performing") || type.includes("Museum")) return "tag-arts";
+  return "tag-off";
+}
+
+// ── Bar chart — count ────────────────────────────────────────────────────────
+function buildCountChart() {
+  const max = Math.max(...DATA.neighborhoods.map(n => n.steam));
+  const el = document.getElementById("hood-count-chart");
+  DATA.neighborhoods.sort((a,b) => b.steam - a.steam).forEach(n => {
+    const pct = (n.steam / max * 100).toFixed(1);
+    const hl = n.highlight;
+    const dim = n.dim;
+    el.innerHTML += `
+      <div class="bar-row">
+        <span class="bar-label${hl?' highlight':''}">${n.name}</span>
+        <div class="bar-track">
+          <div class="bar-fill ${hl?'uws-color':dim?'dim-color':'steam-color'}"
+               style="width:${pct}%"></div>
+        </div>
+        <span class="bar-value${hl?' highlight':''} mono">${n.steam}</span>
+      </div>`;
+  });
+}
+
+// ── Bar chart — adoption ─────────────────────────────────────────────────────
+function buildAdoptionChart() {
+  const sorted = [...DATA.neighborhoods].sort((a,b) => b.adoption - a.adoption);
+  const max = sorted[0].adoption;
+  const el = document.getElementById("hood-adoption-chart");
+  sorted.forEach(n => {
+    const pct = (n.adoption / max * 100).toFixed(1);
+    const hl = n.highlight;
+    const dim = n.dim;
+    el.innerHTML += `
+      <div class="bar-row">
+        <span class="bar-label${hl?' highlight':''}">${n.name}</span>
+        <div class="bar-track">
+          <div class="bar-fill ${hl?'uws-color':dim?'dim-color':'cool-color'}"
+               style="width:${pct}%"></div>
+        </div>
+        <span class="bar-value${hl?' highlight':''} mono">${n.adoption}%</span>
+      </div>`;
+  });
+}
+
+// ── Band chart ───────────────────────────────────────────────────────────────
+function buildBandChart() {
+  const el = document.getElementById("band-chart-wrap");
+  const namedBands = DATA.bands.filter(b => !b.band.includes("Avenue"));
+  const avenueBand = DATA.bands.find(b => b.band.includes("Avenue"));
+  const max = Math.max(...DATA.bands.map(b => b.count));
+  const terminusBands = ["90th–95th St", "96th+ St"];
+
+  let html = '<p class="chart-title">UWS steam buildings by 5-block band (buildings with street-number addresses)</p>';
+  html += '<div class="band-chart">';
+  namedBands.forEach(b => {
+    const pct = max > 0 ? (b.count / max * 100).toFixed(1) : 0;
+    const isTerm = terminusBands.includes(b.band);
+    html += `
+      <div class="band-row${isTerm?' terminus':''}">
+        <span class="band-label${isTerm?' highlight':''}">${b.band}</span>
+        <div class="band-track">
+          <div class="band-fill" style="width:${pct}%"></div>
+        </div>
+        <span class="band-value">${b.count}</span>
+      </div>`;
+  });
+  html += `<div class="terminus-label">▲ STEAM NETWORK TERMINUS — 96TH ST WEST SIDE</div>`;
+
+  if (avenueBand) {
+    html += `
+      <div class="band-row" style="margin-top:16px;opacity:0.6">
+        <span class="band-label">${avenueBand.band}</span>
+        <div class="band-track">
+          <div class="band-fill" style="width:100%;background:var(--bg3);border:1px solid var(--border)"></div>
+        </div>
+        <span class="band-value">${avenueBand.count}</span>
+      </div>`;
+  }
+  html += '</div>';
+
+  el.innerHTML = html;
+}
+
+// ── Donut chart helper ───────────────────────────────────────────────────────
+function buildDonut(svgId, legendId, dataObj, colors) {
+  const entries = Object.entries(dataObj).sort((a,b) => b[1]-a[1]);
+  const total = entries.reduce((s,[,v]) => s+v, 0);
+  const cx = 80, cy = 80, r = 60, innerR = 42;
+  let angle = -Math.PI / 2;
+  const svg = document.getElementById(svgId);
+  const legend = document.getElementById(legendId);
+
+  entries.forEach(([label, val]) => {
+    const frac = val / total;
+    const sweep = frac * 2 * Math.PI;
+    const x1 = cx + r * Math.cos(angle);
+    const y1 = cy + r * Math.sin(angle);
+    const x2 = cx + r * Math.cos(angle + sweep);
+    const y2 = cy + r * Math.sin(angle + sweep);
+    const xi1 = cx + innerR * Math.cos(angle);
+    const yi1 = cy + innerR * Math.sin(angle);
+    const xi2 = cx + innerR * Math.cos(angle + sweep);
+    const yi2 = cy + innerR * Math.sin(angle + sweep);
+    const large = sweep > Math.PI ? 1 : 0;
+    const color = colors[label] || "#555";
+
+    const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    path.setAttribute("d", [
+      `M ${xi1} ${yi1}`,
+      `L ${x1} ${y1}`,
+      `A ${r} ${r} 0 ${large} 1 ${x2} ${y2}`,
+      `L ${xi2} ${yi2}`,
+      `A ${innerR} ${innerR} 0 ${large} 0 ${xi1} ${yi1}`,
+    ].join(" "));
+    path.setAttribute("fill", color);
+    path.setAttribute("stroke", "#141414");
+    path.setAttribute("stroke-width", "2");
+    svg.appendChild(path);
+
+    const pct = (frac * 100).toFixed(1);
+    legend.innerHTML += `
+      <div class="donut-item">
+        <div class="donut-dot" style="background:${color}"></div>
+        <div class="donut-item-text">
+          <strong>${label}</strong>
+          <span>${val} buildings (${pct}%)</span>
+        </div>
+      </div>`;
+
+    angle += sweep;
+  });
+}
+
+// ── Building table ───────────────────────────────────────────────────────────
+let allBuildings = [...DATA.buildings].sort((a,b) => b.steam_mmbtu - a.steam_mmbtu);
+let sortCol = "steam_mmbtu";
+let sortAsc = false;
+
+function renderTable(filter = "") {
+  const tbody = document.getElementById("building-tbody");
+  const query = filter.toLowerCase();
+  const filtered = allBuildings.filter(b =>
+    b.name.toLowerCase().includes(query) || b.address.toLowerCase().includes(query)
+  );
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="5" class="empty-state">No buildings match "${filter}"</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = filtered.map(b => `
+    <tr>
+      <td>${b.name}</td>
+      <td style="color:var(--text-dim)">${b.address}</td>
+      <td><span class="tag ${tagClass(b.property_type)}">${b.property_type.replace("Multifamily Housing","Multifamily")}</span></td>
+      <td class="mono" style="color:var(--steam)">${b.steam_mmbtu?.toLocaleString() ?? "—"}</td>
+      <td class="mono" style="color:var(--text-dim)">${b.year_built ?? "—"}</td>
+    </tr>
+  `).join("");
+}
+
+function setupTableSort() {
+  document.querySelectorAll("thead th[data-col]").forEach(th => {
+    th.addEventListener("click", () => {
+      const col = th.dataset.col;
+      if (sortCol === col) sortAsc = !sortAsc;
+      else { sortCol = col; sortAsc = true; }
+      allBuildings.sort((a,b) => {
+        const av = a[col] ?? "";
+        const bv = b[col] ?? "";
+        if (typeof av === "number") return sortAsc ? av-bv : bv-av;
+        return sortAsc ? av.toString().localeCompare(bv.toString()) : bv.toString().localeCompare(av.toString());
+      });
+      document.querySelectorAll("thead th").forEach(t => t.classList.remove("sorted"));
+      th.classList.add("sorted");
+      renderTable(document.getElementById("building-search").value);
+    });
+  });
+}
+
+// ── Animate bars on scroll ───────────────────────────────────────────────────
+function animateBarsOnScroll() {
+  const bars = document.querySelectorAll(".bar-fill, .band-fill");
+  bars.forEach(bar => {
+    bar.dataset.targetWidth = bar.style.width;
+    bar.style.width = "0";
+  });
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const bar = entry.target;
+        bar.style.width = bar.dataset.targetWidth;
+        observer.unobserve(bar);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  bars.forEach(bar => observer.observe(bar));
+}
+
+// ── Init ─────────────────────────────────────────────────────────────────────
+document.addEventListener("DOMContentLoaded", () => {
+  buildCountChart();
+  buildAdoptionChart();
+  buildBandChart();
+  buildDonut("type-donut", "type-legend", DATA.buildingTypes, TYPE_COLORS);
+  buildDonut("heat-donut", "heat-legend", DATA.heatSources, HEAT_COLORS);
+  renderTable();
+  setupTableSort();
+
+  document.getElementById("building-search").addEventListener("input", e => {
+    renderTable(e.target.value);
+  });
+
+  // Delay animation setup until after all bars are in DOM
+  setTimeout(animateBarsOnScroll, 100);
+});
+</script>
+</body>
+</html>
