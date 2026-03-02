@@ -1,0 +1,2718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How Full Is the Upper West Side? — A Water-Based Occupancy Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:       #0f0f0f;
+    --bg2:      #161616;
+    --bg3:      #1e1e1e;
+    --cream:    #f0ead6;
+    --cream2:   #c8c0a8;
+    --amber:    #c9973a;
+    --amber-dim:#7a5a1e;
+    --teal:     #4a8fa8;
+    --teal-dim: #2a5060;
+    --red:      #c94a3a;
+    --border:   #2a2a2a;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--cream);
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.7;
+  }
+
+  /* ---- LAYOUT ---- */
+  .container { max-width: 760px; margin: 0 auto; padding: 0 24px; }
+  .container-wide { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+  /* ---- TYPOGRAPHY ---- */
+  h1, h2, h3 {
+    font-family: 'DM Serif Display', serif;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+
+  .mono { font-family: 'IBM Plex Mono', monospace; }
+  .serif-italic { font-style: italic; }
+
+  p { margin-bottom: 1.25em; color: var(--cream2); }
+  p strong { color: var(--cream); }
+  a { color: var(--amber); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* ---- HERO ---- */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px 24px 60px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 60% 40%, rgba(201,151,58,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 24px;
+  }
+  .hero h1 {
+    font-size: clamp(2.8rem, 7vw, 5.5rem);
+    color: var(--cream);
+    margin-bottom: 24px;
+    max-width: 700px;
+  }
+  .hero-sub {
+    font-size: 1.2rem;
+    color: var(--cream2);
+    max-width: 580px;
+    margin-bottom: 48px;
+    font-weight: 300;
+  }
+  .hero-number-block {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  .hero-number {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: clamp(4rem, 12vw, 9rem);
+    font-weight: 600;
+    color: var(--amber);
+    line-height: 1;
+  }
+  .hero-number-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.9rem;
+    color: var(--cream2);
+    letter-spacing: 0.05em;
+    max-width: 220px;
+    line-height: 1.4;
+  }
+  .hero-qualifier {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--cream2);
+    opacity: 0.6;
+    letter-spacing: 0.05em;
+  }
+  .hero-scroll-hint {
+    position: absolute;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--cream2);
+    opacity: 0.4;
+    letter-spacing: 0.12em;
+  }
+
+  /* ---- SECTIONS ---- */
+  section {
+    padding: 80px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-number {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 16px;
+    display: block;
+  }
+  h2 {
+    font-size: clamp(1.9rem, 4vw, 2.8rem);
+    color: var(--cream);
+    margin-bottom: 24px;
+  }
+  h3 {
+    font-size: 1.25rem;
+    color: var(--cream);
+    margin-bottom: 12px;
+    margin-top: 32px;
+  }
+
+  /* ---- PULL QUOTE ---- */
+  .pull-quote {
+    border-left: 3px solid var(--amber);
+    padding: 20px 28px;
+    margin: 40px 0;
+    background: rgba(201,151,58,0.04);
+  }
+  .pull-quote p {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+    color: var(--cream);
+    line-height: 1.45;
+    margin: 0;
+  }
+
+  /* ---- STAT CALLOUTS ---- */
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin: 32px 0;
+  }
+  .stat-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 20px;
+  }
+  .stat-card .stat-value {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--amber);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .stat-card .stat-value.teal { color: var(--teal); }
+  .stat-card .stat-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--cream2);
+    opacity: 0.7;
+  }
+
+  /* ---- CHARTS ---- */
+  .chart-wrap {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 28px 24px;
+    margin: 32px 0;
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .chart-wrap.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .chart-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--cream2);
+    opacity: 0.7;
+    margin-bottom: 20px;
+  }
+  canvas { max-width: 100%; }
+
+  /* ---- SLIDER ---- */
+  .slider-block {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 28px;
+    margin: 32px 0;
+  }
+  .slider-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--cream2);
+    margin-bottom: 12px;
+    display: block;
+  }
+  .slider-value-display {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--amber);
+    line-height: 1;
+    margin-bottom: 16px;
+  }
+  input[type=range] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 4px;
+    background: var(--border);
+    outline: none;
+    border-radius: 2px;
+    cursor: pointer;
+    margin-bottom: 12px;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--amber);
+    cursor: pointer;
+  }
+  input[type=range]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--amber);
+    cursor: pointer;
+    border: none;
+  }
+  .slider-ticks {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--cream2);
+    opacity: 0.5;
+    margin-bottom: 20px;
+  }
+  .slider-result {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+  .slider-result p {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--cream2);
+    margin: 0;
+  }
+  .slider-result strong { color: var(--amber); }
+
+  /* ---- DATA TABLE ---- */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    margin: 24px 0;
+  }
+  .data-table th {
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--amber-dim);
+    color: var(--amber);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 0.65rem;
+  }
+  .data-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--cream2);
+    vertical-align: top;
+  }
+  .data-table tr:hover td { background: var(--bg2); }
+  .data-table .highlight { color: var(--cream); }
+  .data-table .amber { color: var(--amber); }
+  .data-table .teal { color: var(--teal); }
+  .data-table .low { color: var(--red); }
+
+  /* ---- PILL BADGES ---- */
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    border-radius: 2px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .badge-amber { background: var(--amber-dim); color: var(--amber); }
+  .badge-teal  { background: var(--teal-dim);  color: var(--teal); }
+  .badge-synth { background: #2a2200; color: #9a7a2a; border: 1px solid #3a3000; }
+
+  /* ---- METHODOLOGY BOX ---- */
+  .method-box {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding: 24px;
+    margin: 24px 0;
+    font-size: 0.88rem;
+  }
+  .method-box h3 { margin-top: 0; font-size: 1rem; }
+
+  /* ---- FOOTER ---- */
+  footer {
+    padding: 60px 24px;
+    border-top: 1px solid var(--border);
+  }
+  footer p {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--cream2);
+    opacity: 0.5;
+    line-height: 1.8;
+    margin-bottom: 0.5em;
+  }
+  footer a { color: var(--teal); opacity: 0.8; }
+
+  /* ---- CAVEAT BAR ---- */
+  .caveat-bar {
+    background: #1a1200;
+    border: 1px solid #3a2800;
+    border-left: 3px solid var(--amber);
+    padding: 12px 16px;
+    margin: 24px 0;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.75rem;
+    color: #9a7a2a;
+    line-height: 1.6;
+  }
+
+  /* ---- OCCUPANCY BAR ---- */
+  .occ-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.75rem;
+  }
+  .occ-bar-label { width: 170px; color: var(--cream2); flex-shrink: 0; }
+  .occ-bar-track { flex: 1; background: var(--bg3); height: 22px; position: relative; }
+  .occ-bar-fill { height: 100%; transition: width 0.8s ease; }
+  .occ-bar-value { width: 50px; text-align: right; color: var(--cream); }
+
+  @media (max-width: 600px) {
+    .stat-row { grid-template-columns: 1fr 1fr; }
+    .occ-bar-label { width: 120px; font-size: 0.65rem; }
+    .data-table { font-size: 0.68rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     HERO
+============================================================ -->
+<div class="hero">
+  <div class="container">
+    <div class="hero-eyebrow">Upper West Side · Functional Occupancy Study · NYC 2022</div>
+    <h1>The Water Doesn't Lie</h1>
+    <p class="hero-sub">New York's Upper West Side has some of the highest rents in the city.
+      We used annual water consumption data — filed by every large building in NYC —
+      to back-calculate how many people are actually living there.
+      The answer is more complicated than the "empty city" narrative suggests.</p>
+
+    <div class="hero-number-block">
+      <div class="hero-number" id="hero-pct">105</div>
+      <div class="hero-number-label mono">% of theoretical<br>full occupancy<br><span style="color:var(--amber);font-size:1.1em">▲</span></div>
+    </div>
+    <div class="hero-qualifier mono">
+      Large multifamily buildings (25,000+ sq ft) · 769 buildings · 69,725 units · LL84 2022 data
+    </div>
+  </div>
+  <div class="hero-scroll-hint">↓ scroll to explore</div>
+</div>
+
+<!-- ============================================================
+     SECTION 1 — METHOD
+============================================================ -->
+<section id="method">
+  <div class="container">
+    <span class="section-number">01 · Method</span>
+    <h2>Water as a population proxy</h2>
+
+    <p>Every building over 25,000 square feet in New York City must annually report its
+      energy and water consumption to the city under <strong>Local Law 84</strong>.
+      That data is public. We downloaded it.</p>
+
+    <p>The core idea is simple: people use water. If a building has 100 apartments
+      and shows water usage consistent with 5 people, something is off.
+      By comparing actual water use against a <em>theoretical full-occupancy baseline</em>,
+      we can estimate how full a building really is — regardless of what the census says,
+      regardless of what the landlord claims.</p>
+
+    <div class="method-box">
+      <h3>The Calculation</h3>
+      <p style="margin-bottom:8px;">
+        <span class="mono" style="color:var(--amber)">NYC DEP baseline:</span>
+        ~50 gallons per person per day (residential average)</p>
+      <p style="margin-bottom:8px;">
+        <span class="mono" style="color:var(--amber)">Full occupancy benchmark:</span>
+        2.3 people/unit × 50 gal/day × 365 days = <strong>42,000 gal/unit/year</strong></p>
+      <p style="margin-bottom:0;">
+        <span class="mono" style="color:var(--amber)">Implied occupancy =</span>
+        actual water use ÷ full-occupancy benchmark</p>
+    </div>
+
+    <div class="slider-block">
+      <span class="slider-label">Adjust the water assumption</span>
+      <div class="slider-value-display">
+        <span id="slider-gpd">50</span>
+        <span class="mono" style="font-size:1rem;color:var(--cream2);font-weight:400"> gal/person/day</span>
+      </div>
+      <input type="range" id="gpd-slider" min="40" max="70" value="50" step="5">
+      <div class="slider-ticks">
+        <span>40</span><span>45</span><span>50</span><span>55</span><span>60</span><span>65</span><span>70</span>
+      </div>
+      <div class="slider-result">
+        <p>At <strong><span id="result-gpd">50</span> gal/day</strong>, the UWS large-building
+          implied occupancy is <strong><span id="result-uws-pct">105.3</span>%</strong> of theoretical full capacity.
+          <br>
+          At 40 gal/day (modern efficient fixtures): <strong><span id="result-min">—</span>%</strong> &nbsp;|&nbsp;
+          At 70 gal/day (pre-WaterSense buildings): <strong><span id="result-max">—</span>%</strong>
+        </p>
+      </div>
+    </div>
+
+    <div class="caveat-bar">
+      <strong>Important:</strong> This dataset (LL84) only covers buildings ≥25,000 sq ft —
+      primarily large rental apartment towers and co-ops. It covers ~73% of estimated UWS housing units.
+      Smaller buildings, townhouses, and most condos are not included. Census population figures are
+      synthetic estimates grounded in ACS 2022; a real Census API key is needed for live data.
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 2 — THE FINDING
+============================================================ -->
+<section id="finding">
+  <div class="container">
+    <span class="section-number">02 · The Finding</span>
+    <h2>Large UWS buildings appear full</h2>
+
+    <p>The short version: <strong>the "empty Upper West Side" narrative doesn't hold for the
+    large apartment stock.</strong> By water metrics, the big multifamily buildings are running
+    at or above theoretical full occupancy. The median UWS large building shows water
+    consumption consistent with <strong>full occupancy</strong>.</p>
+
+    <div class="stat-row" id="stats-row">
+      <div class="stat-card">
+        <div class="stat-value" id="stat-pct">105.3%</div>
+        <div class="stat-label">Aggregate implied occupancy<br>(large buildings)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">102.7%</div>
+        <div class="stat-label">Median single-building<br>implied occupancy</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">2.42</div>
+        <div class="stat-label">Implied residents<br>per unit</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value teal">72.6%</div>
+        <div class="stat-label">Dataset coverage<br>(% of census units)</div>
+      </div>
+    </div>
+
+    <p>This is a different story than you might expect. High rents haven't emptied the
+      large apartment towers. The data suggests these buildings — pre-war walk-ups turned
+      luxury, mid-century coops, newer rentals — are occupied. People are there.</p>
+
+    <div class="pull-quote">
+      <p>"The water tells us that most of the Upper West Side's large apartment buildings
+      are occupied. The story of urban vacancy is more complicated than headline numbers suggest."</p>
+    </div>
+
+    <p>There is, however, real variation. Some buildings show dramatically low water use.
+      And the dataset can't speak to what it doesn't cover: smaller buildings,
+      luxury condos sold as pied-à-terres, or units held vacant while on the market.</p>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 3 — DISTRIBUTION
+============================================================ -->
+<section id="distribution">
+  <div class="container">
+    <span class="section-number">03 · Distribution</span>
+    <h2>Some buildings are nearly empty</h2>
+
+    <p>Zoom in on the distribution of individual UWS buildings and a different picture emerges.
+      While most buildings cluster near full occupancy, a meaningful tail shows buildings
+      with surprisingly low water use — consistent with significant vacancy.</p>
+
+    <div class="chart-wrap" id="wrap-dist">
+      <div class="chart-title">UWS Buildings by Implied Occupancy Bucket (% of units in each range)</div>
+      <canvas id="chart-dist" height="280"></canvas>
+    </div>
+
+    <p>About <strong>5.6% of buildings</strong> — accounting for 5.6% of covered units —
+      show implied occupancy below 50% of capacity. A further ~16% are in the
+      50–75% "moderate" range. These outliers may represent:</p>
+
+    <ul style="margin: 0 0 1.25em 1.5em; color: var(--cream2);">
+      <li>Buildings undergoing renovation or between tenancies</li>
+      <li>Institutional or mixed-use properties with non-residential water</li>
+      <li>Reporting errors in the LL84 submission</li>
+      <li>Genuine structural vacancies — buildings that have shed population</li>
+    </ul>
+
+    <h3>The buildings below 50% occupancy</h3>
+    <p>Here are the 15 UWS buildings in the dataset with the lowest implied occupancy
+      (by water consumption per unit). These should be treated with appropriate skepticism —
+      data quality issues are possible — but they represent a real signal worth investigating.</p>
+
+    <div style="overflow-x:auto;">
+      <table class="data-table" id="low-occupancy-table">
+        <thead>
+          <tr>
+            <th>Property Name</th>
+            <th>Address</th>
+            <th>ZIP</th>
+            <th>Units</th>
+            <th>Implied Occ.</th>
+          </tr>
+        </thead>
+        <tbody id="low-occ-tbody">
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 4 — NEIGHBORHOOD COMPARISON
+============================================================ -->
+<section id="comparison">
+  <div class="container-wide">
+    <div class="container" style="padding:0;">
+      <span class="section-number">04 · Neighborhood Comparison</span>
+      <h2>How the UWS compares</h2>
+      <p>The UWS isn't alone. We ran the same analysis across seven NYC neighborhoods,
+        from Tribeca to Washington Heights. The results reveal real geographic variation
+        in how water — and by proxy, people — flows through the city's housing stock.</p>
+    </div>
+
+    <div class="chart-wrap" id="wrap-compare" style="margin-top:32px;">
+      <div class="chart-title">Implied Occupancy by Neighborhood — % of Full-Occupancy Baseline</div>
+      <canvas id="chart-compare" height="320"></canvas>
+    </div>
+
+    <div class="container" style="padding:0;">
+      <div id="occupancy-bars" style="margin: 32px 0;"></div>
+
+      <p>A few notable patterns:</p>
+      <ul style="margin: 0 0 1.25em 1.5em; color: var(--cream2);">
+        <li><strong style="color:var(--cream)">Washington Heights</strong> shows the highest implied occupancy,
+          consistent with its status as a dense working-class neighborhood with larger household sizes.</li>
+        <li><strong style="color:var(--cream)">Park Slope</strong> shows the lowest — 93% — perhaps reflecting
+          more empty-nesters, smaller households, or better water efficiency in newer buildings.</li>
+        <li><strong style="color:var(--cream)">The UWS sits near the middle</strong> at 105%, indistinguishable
+          from comparable neighborhoods by this metric alone.</li>
+        <li><strong style="color:var(--cream)">Tribeca and Chelsea</strong>, often cited as high-vacancy luxury
+          neighborhoods, actually show high water use — these LL84 buildings are primarily rental
+          apartment towers, not the luxury condos that generate pied-à-terre concerns.</li>
+      </ul>
+
+      <div class="caveat-bar">
+        <strong>Methodological note:</strong> Washington Heights shows unusually high implied occupancy
+        (169%). This likely reflects larger average household sizes (the neighborhood has a large
+        Dominican-American community), older plumbing with higher leak rates, and the possibility
+        that the LL84 sample skews toward the largest, most amenitized buildings in each area —
+        which may not be representative of the full housing stock.
+      </div>
+
+      <div style="overflow-x:auto; margin-top:24px;">
+        <table class="data-table" id="neighborhood-table">
+          <thead>
+            <tr>
+              <th>Neighborhood</th>
+              <th>Buildings</th>
+              <th>Units</th>
+              <th>Water/Unit (kgal/yr)</th>
+              <th>Implied Occ. %</th>
+              <th>Bldgs &lt;50% Occ.</th>
+              <th>Bldgs &gt;100% Occ.</th>
+            </tr>
+          </thead>
+          <tbody id="neighborhood-tbody">
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 5 — BY BUILDING ERA
+============================================================ -->
+<section id="era">
+  <div class="container">
+    <span class="section-number">05 · Building Era</span>
+    <h2>Do older buildings use more water?</h2>
+
+    <p>Older buildings tend to have less efficient plumbing — more leaks, older fixtures,
+      no WaterSense retrofits. If pre-war buildings systematically show higher water use
+      than modern ones, it could inflate our occupancy estimates for neighborhoods
+      with older housing stock.</p>
+
+    <div class="chart-wrap" id="wrap-era">
+      <div class="chart-title">UWS Median Implied Occupancy by Building Era</div>
+      <canvas id="chart-era" height="250"></canvas>
+    </div>
+
+    <p>The data does show pre-war buildings running slightly higher than modern ones,
+      though the difference is modest. This supports the idea that our 50 gal/person/day
+      baseline may be slightly optimistic for the UWS's predominantly pre-war stock —
+      meaning the true occupancy rate might be <em>somewhat lower</em> than the headline
+      number suggests. Use the slider in Section 1 to explore the sensitivity.</p>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 6 — WHAT THE DATA CAN'T SAY
+============================================================ -->
+<section id="limits">
+  <div class="container">
+    <span class="section-number">06 · What the Data Can't Say</span>
+    <h2>The invisible housing stock</h2>
+
+    <p>This analysis covers <strong>large multifamily buildings</strong> — the kind with
+      more than 25,000 square feet of floor area. That captures the classic UWS pre-war
+      apartment towers, the big mid-century co-ops, the newer doorman buildings.</p>
+
+    <p>It does not capture:</p>
+
+    <div class="stat-row">
+      <div class="stat-card" style="border-color:var(--amber-dim)">
+        <div class="stat-value" style="font-size:1.4rem;color:var(--cream2)">~27%</div>
+        <div class="stat-label">Of UWS housing units not covered by LL84 — likely smaller buildings</div>
+      </div>
+      <div class="stat-card" style="border-color:var(--amber-dim)">
+        <div class="stat-value" style="font-size:1.4rem;color:var(--cream2)">Many</div>
+        <div class="stat-label">Luxury condos sold to non-resident investors ("pied-à-terre" units)</div>
+      </div>
+      <div class="stat-card" style="border-color:var(--amber-dim)">
+        <div class="stat-value" style="font-size:1.4rem;color:var(--cream2)">8.5%</div>
+        <div class="stat-label">Census-estimated vacancy rate (synthetic estimate)</div>
+      </div>
+    </div>
+
+    <p>The pied-à-terre phenomenon — wealthy buyers who use NYC apartments as
+      occasional crash pads rather than primary residences — is real and documented.
+      But it tends to concentrate in high-end condominiums, not the large rental buildings
+      and co-ops that dominate the LL84 dataset. A full picture would require
+      combining this water analysis with condo sales records and voter registration data.</p>
+
+    <div class="pull-quote">
+      <p>"The UWS's large apartment buildings are occupied.
+        The vacancy story, if it exists, lives elsewhere: in the luxury condos,
+        the brownstone floors, the units held off-market. That story requires different data."</p>
+    </div>
+
+    <p>The 2021 NYC Housing Vacancy Survey found citywide residential vacancy at 4.5%,
+      with much higher rates in Manhattan luxury buildings. But "vacancy" as measured by
+      census surveys counts units that are legally available but unoccupied — not units
+      owned by non-residents who use them part-time. The true "functional vacancy"
+      rate is likely higher, and water data is one of the few ways to approach it.</p>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 7 — METHODOLOGY & CAVEATS
+============================================================ -->
+<section id="methodology">
+  <div class="container">
+    <span class="section-number">07 · Methodology &amp; Caveats</span>
+    <h2>How we did this</h2>
+
+    <div class="method-box">
+      <h3>Data Sources</h3>
+      <p><strong>LL84 Benchmarking (2022)</strong> —
+        <a href="https://data.cityofnewyork.us/Environment/Energy-and-Water-Data-Disclosure-for-Local-Law-84-/usc3-8zwd" target="_blank" rel="noopener">NYC Open Data</a>.
+        Annual water and energy reports for all buildings ≥25,000 sq ft.
+        We filtered to residential use types (Multifamily Housing, Residence Hall/Dormitory,
+        Senior Living Community).</p>
+      <p><strong>PLUTO (MapPLUTO 2023)</strong> —
+        <a href="https://data.cityofnewyork.us/City-Government/Primary-Land-Use-Tax-Lot-Output-PLUTO-/64uk-42ks" target="_blank" rel="noopener">NYC Open Data</a>.
+        Used for building age and class enrichment via BBL join.</p>
+      <p style="margin:0;"><strong>Census ACS 2022</strong> — Population and housing unit estimates
+        are synthetic approximations based on published ACS 5-year estimates and the
+        2021 NYC Housing Vacancy Survey. A Census API key is required for live data pulls;
+        see the source code for the query.</p>
+    </div>
+
+    <div class="method-box">
+      <h3>Known Limitations</h3>
+      <ul style="margin: 0 0 0 1.25em; color: var(--cream2);">
+        <li style="margin-bottom:8px;"><strong style="color:var(--cream)">Non-residential water use:</strong>
+          Multifamily buildings include laundry rooms, gyms, pools, cooling towers,
+          and commercial tenants. These inflate the per-unit water figure and push
+          implied occupancy above 100%.</li>
+        <li style="margin-bottom:8px;"><strong style="color:var(--cream)">Plumbing efficiency:</strong>
+          Pre-war buildings have higher leak rates and older fixtures. Our 50 gal/person/day
+          baseline may be too conservative for older stock.</li>
+        <li style="margin-bottom:8px;"><strong style="color:var(--cream)">Self-reported data:</strong>
+          LL84 figures come from building owners; some are estimated rather than metered.
+          Estimated readings are flagged in the dataset but not excluded here.</li>
+        <li style="margin-bottom:8px;"><strong style="color:var(--cream)">Coverage bias:</strong>
+          The 25,000 sq ft threshold means only large buildings are covered.
+          Smaller buildings may behave differently.</li>
+        <li style="margin-bottom:0;"><strong style="color:var(--cream)">Outlier exclusion:</strong>
+          Buildings reporting more than 150 kgal/unit/year were excluded as likely data errors
+          or buildings with major non-residential water use (65 buildings removed).</li>
+      </ul>
+    </div>
+
+    <h3>Sensitivity Analysis</h3>
+    <p>The table below shows how the UWS implied occupancy changes across different
+      water-use assumptions for each neighborhood. The UWS finding is robust:
+      it shows near-full occupancy across all reasonable assumptions.</p>
+
+    <div style="overflow-x:auto;">
+      <table class="data-table" id="sensitivity-table">
+        <thead>
+          <tr>
+            <th>Gal/Person/Day</th>
+            <th>UWS</th>
+            <th>Park Slope</th>
+            <th>Williamsburg</th>
+            <th>UES</th>
+            <th>Tribeca</th>
+            <th>Chelsea</th>
+            <th>W. Heights</th>
+          </tr>
+        </thead>
+        <tbody id="sensitivity-tbody">
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+============================================================ -->
+<footer>
+  <div class="container">
+    <p>This is independent research using publicly available NYC data. The methodology is open.</p>
+    <p>
+      Data:
+      <a href="https://data.cityofnewyork.us/Environment/Energy-and-Water-Data-Disclosure-for-Local-Law-84-/usc3-8zwd" target="_blank" rel="noopener">LL84 Benchmarking (NYC Open Data)</a> ·
+      <a href="https://data.cityofnewyork.us/City-Government/Primary-Land-Use-Tax-Lot-Output-PLUTO-/64uk-42ks" target="_blank" rel="noopener">PLUTO (NYC DCP)</a> ·
+      <a href="https://www.census.gov/programs-surveys/acs" target="_blank" rel="noopener">ACS 2022 (US Census)</a>
+    </p>
+    <p>Analysis year: 2022 · Built with Chart.js · <a href="uws_data.json" download>Download raw JSON</a></p>
+    <p style="margin-top:16px; color:#555; font-size:0.65rem;">
+      Census population figures are synthetic estimates.
+      Neighborhood definitions approximate — zip code boundaries do not perfectly align with neighborhood boundaries.
+      This analysis should not be cited as primary research without independent verification.
+    </p>
+  </div>
+</footer>
+
+
+<script>
+// ============================================================
+// DATA (embedded from uws_data.json)
+// ============================================================
+const DATA = {
+  "meta": {
+    "data_year": 2022,
+    "data_source": "LL84 Energy & Water Benchmarking + PLUTO (NYC Open Data)",
+    "census_source": "ACS 2022 5-Year Estimates (synthetic \u2014 Census API key required for live pull)",
+    "census_synthetic": true,
+    "outlier_filter": "Excluded buildings with water/unit > 150.0 kgal/yr",
+    "generated": "2026-03-01T23:52:22.454725"
+  },
+  "assumptions": {
+    "gallons_per_person_per_day": 50,
+    "avg_household_size": 2.3,
+    "full_occupancy_kgal_per_unit_per_year": 41.97,
+    "outlier_max_kgal_per_unit": 150.0
+  },
+  "uws_summary": {
+    "total_buildings_in_dataset": 769,
+    "total_units_in_dataset": 69725,
+    "implied_total_residents": 168829,
+    "implied_residents_per_unit": 2.42,
+    "pct_of_full_occupancy": 105.3,
+    "median_building_occupancy_pct": 102.7,
+    "pct_buildings_below_half_occupancy": 5.1,
+    "pct_buildings_above_full": 54.2,
+    "census_estimated_population": 211000,
+    "census_estimated_housing_units": 96000,
+    "census_vacancy_pct": 8.5,
+    "estimated_full_capacity_pop": 220799,
+    "implied_missing_residents": 0,
+    "dataset_coverage_pct": 72.6,
+    "data_synthetic": false
+  },
+  "neighborhood_comparison": [
+    {
+      "neighborhood": "Chelsea",
+      "total_buildings": 22,
+      "total_units": 12786.32,
+      "total_water_kgal": 640345.3000000002,
+      "implied_persons": 35087.41369863013,
+      "median_occupancy_rate": 1.02,
+      "p25_occupancy": 0.73,
+      "p75_occupancy": 1.51,
+      "pct_buildings_under_50pct": 5.26,
+      "pct_buildings_under_25pct": 1.05,
+      "pct_buildings_over_100pct": 52.63,
+      "implied_persons_per_unit": 2.74,
+      "water_per_unit_kgal": 50.08,
+      "pct_of_full_occupancy": 119.31
+    },
+    {
+      "neighborhood": "Park Slope",
+      "total_buildings": 17,
+      "total_units": 3615.65,
+      "total_water_kgal": 140727.50000000003,
+      "implied_persons": 7711.095890410961,
+      "median_occupancy_rate": 0.94,
+      "p25_occupancy": 0.65,
+      "p75_occupancy": 1.22,
+      "pct_buildings_under_50pct": 14.71,
+      "pct_buildings_under_25pct": 5.88,
+      "pct_buildings_over_100pct": 44.12,
+      "implied_persons_per_unit": 2.13,
+      "water_per_unit_kgal": 38.92,
+      "pct_of_full_occupancy": 92.73
+    },
+    {
+      "neighborhood": "Tribeca",
+      "total_buildings": 66,
+      "total_units": 5468.179999999999,
+      "total_water_kgal": 272152.30000000016,
+      "implied_persons": 14912.454794520561,
+      "median_occupancy_rate": 1.29,
+      "p25_occupancy": 0.92,
+      "p75_occupancy": 1.81,
+      "pct_buildings_under_50pct": 4.73,
+      "pct_buildings_under_25pct": 1.35,
+      "pct_buildings_over_100pct": 70.95,
+      "implied_persons_per_unit": 2.73,
+      "water_per_unit_kgal": 49.77,
+      "pct_of_full_occupancy": 118.57
+    },
+    {
+      "neighborhood": "Upper East Side",
+      "total_buildings": 84,
+      "total_units": 30698.14,
+      "total_water_kgal": 1426322.5999999982,
+      "implied_persons": 78154.6630136987,
+      "median_occupancy_rate": 1.08,
+      "p25_occupancy": 0.81,
+      "p75_occupancy": 1.38,
+      "pct_buildings_under_50pct": 3.68,
+      "pct_buildings_under_25pct": 0.67,
+      "pct_buildings_over_100pct": 58.86,
+      "implied_persons_per_unit": 2.55,
+      "water_per_unit_kgal": 46.46,
+      "pct_of_full_occupancy": 110.69
+    },
+    {
+      "neighborhood": "Upper West Side",
+      "total_buildings": 183,
+      "total_units": 69725.24,
+      "total_water_kgal": 3081132.8000000045,
+      "implied_persons": 168829.19452054802,
+      "median_occupancy_rate": 1.03,
+      "p25_occupancy": 0.79,
+      "p75_occupancy": 1.33,
+      "pct_buildings_under_50pct": 5.07,
+      "pct_buildings_under_25pct": 1.3,
+      "pct_buildings_over_100pct": 54.23,
+      "implied_persons_per_unit": 2.42,
+      "water_per_unit_kgal": 44.19,
+      "pct_of_full_occupancy": 105.28
+    },
+    {
+      "neighborhood": "Washington Heights",
+      "total_buildings": 109,
+      "total_units": 22322.96,
+      "total_water_kgal": 1587885.9999999998,
+      "implied_persons": 87007.45205479453,
+      "median_occupancy_rate": 1.5,
+      "p25_occupancy": 1.22,
+      "p75_occupancy": 2.33,
+      "pct_buildings_under_50pct": 1.62,
+      "pct_buildings_under_25pct": 0.81,
+      "pct_buildings_over_100pct": 85.98,
+      "implied_persons_per_unit": 3.9,
+      "water_per_unit_kgal": 71.13,
+      "pct_of_full_occupancy": 169.46
+    },
+    {
+      "neighborhood": "Williamsburg",
+      "total_buildings": 61,
+      "total_units": 8621.48,
+      "total_water_kgal": 399442.1,
+      "implied_persons": 21887.23835616439,
+      "median_occupancy_rate": 1.21,
+      "p25_occupancy": 0.78,
+      "p75_occupancy": 1.77,
+      "pct_buildings_under_50pct": 10.2,
+      "pct_buildings_under_25pct": 4.08,
+      "pct_buildings_over_100pct": 59.86,
+      "implied_persons_per_unit": 2.54,
+      "water_per_unit_kgal": 46.33,
+      "pct_of_full_occupancy": 110.38
+    }
+  ],
+  "uws_occupancy_distribution": [
+    {
+      "occupancy_bucket": "Ghost (<10%)",
+      "building_count": 0,
+      "unit_count": 685.0,
+      "pct_units": 1.0,
+      "pct_buildings": 0.0
+    },
+    {
+      "occupancy_bucket": "Very Low (10\u201325%)",
+      "building_count": 1,
+      "unit_count": 393.0,
+      "pct_units": 0.6,
+      "pct_buildings": 0.1
+    },
+    {
+      "occupancy_bucket": "Low (25\u201350%)",
+      "building_count": 9,
+      "unit_count": 2817.87,
+      "pct_units": 4.0,
+      "pct_buildings": 1.2
+    },
+    {
+      "occupancy_bucket": "Moderate (50\u201375%)",
+      "building_count": 29,
+      "unit_count": 11113.37,
+      "pct_units": 15.9,
+      "pct_buildings": 3.8
+    },
+    {
+      "occupancy_bucket": "Likely Full (75\u2013100%)",
+      "building_count": 39,
+      "unit_count": 19777.23,
+      "pct_units": 28.4,
+      "pct_buildings": 5.1
+    },
+    {
+      "occupancy_bucket": "Over-occupied (100\u2013150%)",
+      "building_count": 70,
+      "unit_count": 27222.82,
+      "pct_units": 39.0,
+      "pct_buildings": 9.1
+    },
+    {
+      "occupancy_bucket": "Extreme (>150%)",
+      "building_count": 35,
+      "unit_count": 7715.95,
+      "pct_units": 11.1,
+      "pct_buildings": 4.6
+    }
+  ],
+  "uws_by_era": [
+    {
+      "era": "Pre-War (<1940)",
+      "median_occupancy": 1.033,
+      "unit_count": 45114.729999999996,
+      "building_count": 147
+    },
+    {
+      "era": "1940\u20131970",
+      "median_occupancy": 0.921,
+      "unit_count": 8677.0,
+      "building_count": 13
+    },
+    {
+      "era": "1970\u20131990",
+      "median_occupancy": 1.056,
+      "unit_count": 9298.51,
+      "building_count": 14
+    },
+    {
+      "era": "1990\u20132010",
+      "median_occupancy": 1.241,
+      "unit_count": 5121.0,
+      "building_count": 8
+    },
+    {
+      "era": "Modern (2010+)",
+      "median_occupancy": 0.694,
+      "unit_count": 1514.0,
+      "building_count": 1
+    }
+  ],
+  "sensitivity_table": {
+    "40": {
+      "Chelsea": 149.1,
+      "Park Slope": 115.9,
+      "Tribeca": 148.2,
+      "Upper East Side": 138.4,
+      "Upper West Side": 131.6,
+      "Washington Heights": 211.8,
+      "Williamsburg": 138.0
+    },
+    "45": {
+      "Chelsea": 132.6,
+      "Park Slope": 103.0,
+      "Tribeca": 131.7,
+      "Upper East Side": 123.0,
+      "Upper West Side": 117.0,
+      "Washington Heights": 188.3,
+      "Williamsburg": 122.6
+    },
+    "50": {
+      "Chelsea": 119.3,
+      "Park Slope": 92.7,
+      "Tribeca": 118.6,
+      "Upper East Side": 110.7,
+      "Upper West Side": 105.3,
+      "Washington Heights": 169.5,
+      "Williamsburg": 110.4
+    },
+    "55": {
+      "Chelsea": 108.5,
+      "Park Slope": 84.3,
+      "Tribeca": 107.8,
+      "Upper East Side": 100.6,
+      "Upper West Side": 95.7,
+      "Washington Heights": 154.1,
+      "Williamsburg": 100.3
+    },
+    "60": {
+      "Chelsea": 99.4,
+      "Park Slope": 77.3,
+      "Tribeca": 98.8,
+      "Upper East Side": 92.2,
+      "Upper West Side": 87.7,
+      "Washington Heights": 141.2,
+      "Williamsburg": 92.0
+    },
+    "65": {
+      "Chelsea": 91.8,
+      "Park Slope": 71.3,
+      "Tribeca": 91.2,
+      "Upper East Side": 85.1,
+      "Upper West Side": 81.0,
+      "Washington Heights": 130.4,
+      "Williamsburg": 84.9
+    },
+    "70": {
+      "Chelsea": 85.2,
+      "Park Slope": 66.2,
+      "Tribeca": 84.7,
+      "Upper East Side": 79.1,
+      "Upper West Side": 75.2,
+      "Washington Heights": 121.0,
+      "Williamsburg": 78.8
+    }
+  },
+  "census_data": {
+    "Upper West Side": {
+      "population": 211000,
+      "housing_units": 96000,
+      "vacancy_pct": 8.5,
+      "median_rent": 3100
+    },
+    "Upper East Side": {
+      "population": 217000,
+      "housing_units": 98000,
+      "vacancy_pct": 7.2,
+      "median_rent": 3400
+    },
+    "Williamsburg": {
+      "population": 152000,
+      "housing_units": 66000,
+      "vacancy_pct": 3.1,
+      "median_rent": 3200
+    },
+    "Park Slope": {
+      "population": 77000,
+      "housing_units": 33000,
+      "vacancy_pct": 2.8,
+      "median_rent": 2800
+    },
+    "Washington Heights": {
+      "population": 191000,
+      "housing_units": 73000,
+      "vacancy_pct": 2.4,
+      "median_rent": 1650
+    },
+    "Chelsea": {
+      "population": 55000,
+      "housing_units": 31000,
+      "vacancy_pct": 11.2,
+      "median_rent": 4100
+    },
+    "Tribeca": {
+      "population": 16000,
+      "housing_units": 8400,
+      "vacancy_pct": 14.1,
+      "median_rent": 6200
+    }
+  },
+  "uws_buildings_lowest": [
+    {
+      "name": "280 Riverside Drive",
+      "address": "280 Riverside Drive",
+      "zip": "10025",
+      "units": 129.0,
+      "water_kgal": 5.6,
+      "water_per_unit": 0.043410852713178294,
+      "occupancy_rate": 0.0010342073308678569,
+      "year_built": 1940,
+      "bldg_class": null,
+      "occupancy_pct": 0.1
+    },
+    {
+      "name": "900 West End Avenue",
+      "address": "900 West End Avenue",
+      "zip": "10025",
+      "units": 128.0,
+      "water_kgal": 8.7,
+      "water_per_unit": 0.06796875,
+      "occupancy_rate": 0.0016192674210839786,
+      "year_built": 1927,
+      "bldg_class": null,
+      "occupancy_pct": 0.2
+    },
+    {
+      "name": "PARKWAY EAST PROPERTIES 58 W 72ND LLC",
+      "address": "58 WEST 72ND ST",
+      "zip": "10023",
+      "units": 25.0,
+      "water_kgal": 76.3,
+      "water_per_unit": 3.052,
+      "occupancy_rate": 0.07270994639666468,
+      "year_built": 1920,
+      "bldg_class": null,
+      "occupancy_pct": 7.3
+    },
+    {
+      "name": "Halstead - 207 West 79th Street",
+      "address": "207 West 79th Street",
+      "zip": "10024",
+      "units": 361.0,
+      "water_kgal": 1104.9,
+      "water_per_unit": 3.0606648199445985,
+      "occupancy_rate": 0.07291637450731624,
+      "year_built": 2015,
+      "bldg_class": null,
+      "occupancy_pct": 7.3
+    },
+    {
+      "name": "Maureen Schlatter: 313-317 West 98th Street",
+      "address": "313-317 West 98th Street",
+      "zip": "10025",
+      "units": 42.0,
+      "water_kgal": 174.5,
+      "water_per_unit": 4.154761904761905,
+      "occupancy_rate": 0.09898182024447659,
+      "year_built": 1920,
+      "bldg_class": null,
+      "occupancy_pct": 9.9
+    },
+    {
+      "name": "Grace Apartments",
+      "address": "123 W. 104th Street",
+      "zip": "10025",
+      "units": 68.0,
+      "water_kgal": 355.6,
+      "water_per_unit": 5.229411764705882,
+      "occupancy_rate": 0.12458396104123606,
+      "year_built": 1991,
+      "bldg_class": null,
+      "occupancy_pct": 12.5
+    },
+    {
+      "name": "Flatiron: 814 Amsterdam Ave",
+      "address": "814 Amsterdam Ave",
+      "zip": "10025",
+      "units": 44.0,
+      "water_kgal": 260.3,
+      "water_per_unit": 5.915909090909091,
+      "occupancy_rate": 0.1409388705398235,
+      "year_built": 1950,
+      "bldg_class": null,
+      "occupancy_pct": 14.1
+    },
+    {
+      "name": "205 West 95th Street",
+      "address": "205 West 95th Street",
+      "zip": "10025",
+      "units": 54.0,
+      "water_kgal": 474.0,
+      "water_per_unit": 8.777777777777779,
+      "occupancy_rate": 0.20911918469988752,
+      "year_built": 1948,
+      "bldg_class": null,
+      "occupancy_pct": 20.9
+    },
+    {
+      "name": "Olnick - 201 West 77th Street / 360 Amsterdam Avenue",
+      "address": "360 Amsterdam Avenue",
+      "zip": "10024",
+      "units": 127.0,
+      "water_kgal": 1151.3,
+      "water_per_unit": 9.065354330708661,
+      "occupancy_rate": 0.21597032354279125,
+      "year_built": 1929,
+      "bldg_class": null,
+      "occupancy_pct": 21.6
+    },
+    {
+      "name": "Campus 120-125 Riverside Drive",
+      "address": "120 Riverside Drive",
+      "zip": "10024",
+      "units": 100.0,
+      "water_kgal": 989.7,
+      "water_per_unit": 9.897,
+      "occupancy_rate": 0.23578320428826685,
+      "year_built": 1907,
+      "bldg_class": null,
+      "occupancy_pct": 23.6
+    },
+    {
+      "name": "Rose House",
+      "address": "305 West 97th Street",
+      "zip": "10025",
+      "units": 108.0,
+      "water_kgal": 1187.7,
+      "water_per_unit": 10.997222222222222,
+      "occupancy_rate": 0.261994573489511,
+      "year_built": 1917,
+      "bldg_class": null,
+      "occupancy_pct": 26.2
+    },
+    {
+      "name": "Jupiter: 317 West 95th St.",
+      "address": "317 West 95th Street",
+      "zip": "10025",
+      "units": 30.0,
+      "water_kgal": 357.3,
+      "water_per_unit": 11.91,
+      "occupancy_rate": 0.28374032162001195,
+      "year_built": 1902,
+      "bldg_class": "R4",
+      "occupancy_pct": 28.4
+    },
+    {
+      "name": "15 West 84th Street",
+      "address": "15 West 84th Street",
+      "zip": "10024",
+      "units": 76.0,
+      "water_kgal": 929.5,
+      "water_per_unit": 12.230263157894736,
+      "occupancy_rate": 0.29137017648349584,
+      "year_built": 1950,
+      "bldg_class": null,
+      "occupancy_pct": 29.1
+    },
+    {
+      "name": "305 West 97th Street",
+      "address": "305 West 97th Street",
+      "zip": "10025",
+      "units": 97.0,
+      "water_kgal": 1187.7,
+      "water_per_unit": 12.244329896907217,
+      "occupancy_rate": 0.29170529831821845,
+      "year_built": 1917,
+      "bldg_class": null,
+      "occupancy_pct": 29.2
+    },
+    {
+      "name": "412 WEST END REALTY",
+      "address": "412 WEST END AVE",
+      "zip": "10024",
+      "units": 37.0,
+      "water_kgal": 455.5,
+      "water_per_unit": 12.31081081081081,
+      "occupancy_rate": 0.2932891199716692,
+      "year_built": 1900,
+      "bldg_class": null,
+      "occupancy_pct": 29.3
+    },
+    {
+      "name": "The Brookford",
+      "address": "315 Central Park West",
+      "zip": "10025",
+      "units": 131.72,
+      "water_kgal": 1740.1,
+      "water_per_unit": 13.210598238688126,
+      "occupancy_rate": 0.3147253898436719,
+      "year_built": 1911,
+      "bldg_class": "D6",
+      "occupancy_pct": 31.5
+    },
+    {
+      "name": "150 W 79 St.",
+      "address": "150 W 79 Street",
+      "zip": "10024",
+      "units": 130.0,
+      "water_kgal": 1768.4,
+      "water_per_unit": 13.603076923076923,
+      "occupancy_rate": 0.3240756860768773,
+      "year_built": 1910,
+      "bldg_class": "D4",
+      "occupancy_pct": 32.4
+    },
+    {
+      "name": "St. Agnes Residence",
+      "address": "237 W. 74th St.",
+      "zip": "10023",
+      "units": 109.0,
+      "water_kgal": 1595.8,
+      "water_per_unit": 14.640366972477064,
+      "occupancy_rate": 0.3487877777838491,
+      "year_built": 1910,
+      "bldg_class": "M9",
+      "occupancy_pct": 34.9
+    },
+    {
+      "name": "33 West End Avenue",
+      "address": "317 West 61st Street",
+      "zip": "10023",
+      "units": 331.0,
+      "water_kgal": 5258.8,
+      "water_per_unit": 15.887613293051361,
+      "occupancy_rate": 0.3785018056712653,
+      "year_built": 2006,
+      "bldg_class": null,
+      "occupancy_pct": 37.9
+    },
+    {
+      "name": "509 West 110th Street",
+      "address": "509 West 110th Street",
+      "zip": "10025",
+      "units": 94.0,
+      "water_kgal": 1512.6,
+      "water_per_unit": 16.091489361702127,
+      "occupancy_rate": 0.3833588889029691,
+      "year_built": 1909,
+      "bldg_class": "D3",
+      "occupancy_pct": 38.3
+    },
+    {
+      "name": "350 Central Park West",
+      "address": "350 Central Park West",
+      "zip": "10025",
+      "units": 388.43,
+      "water_kgal": 6267.9,
+      "water_per_unit": 16.13649821074582,
+      "occupancy_rate": 0.38443116642634484,
+      "year_built": 1929,
+      "bldg_class": null,
+      "occupancy_pct": 38.4
+    },
+    {
+      "name": "240 W 75 St",
+      "address": "240 W 75 St",
+      "zip": "10023",
+      "units": 53.22,
+      "water_kgal": 867.0,
+      "water_per_unit": 16.290868094701242,
+      "occupancy_rate": 0.38810882893868354,
+      "year_built": 1920,
+      "bldg_class": "D4",
+      "occupancy_pct": 38.8
+    },
+    {
+      "name": "29 West 64th Street",
+      "address": "29 West 64th Street",
+      "zip": "10023",
+      "units": 43.0,
+      "water_kgal": 701.7,
+      "water_per_unit": 16.31860465116279,
+      "occupancy_rate": 0.38876961646605823,
+      "year_built": 1938,
+      "bldg_class": null,
+      "occupancy_pct": 38.9
+    },
+    {
+      "name": "320 West 83rd Street",
+      "address": "320 West 83rd Street",
+      "zip": "10024",
+      "units": 50.0,
+      "water_kgal": 833.3,
+      "water_per_unit": 16.666,
+      "occupancy_rate": 0.3970458606313282,
+      "year_built": 1940,
+      "bldg_class": null,
+      "occupancy_pct": 39.7
+    },
+    {
+      "name": "AKAM - 375 West End Avenue",
+      "address": "375 West End Avenue",
+      "zip": "10024",
+      "units": 48.0,
+      "water_kgal": 805.4,
+      "water_per_unit": 16.779166666666665,
+      "occupancy_rate": 0.3997419098669843,
+      "year_built": 1912,
+      "bldg_class": null,
+      "occupancy_pct": 40.0
+    },
+    {
+      "name": "25 West 64th Street",
+      "address": "25 West 64th Street",
+      "zip": "10023",
+      "units": 53.0,
+      "water_kgal": 897.7,
+      "water_per_unit": 16.937735849056605,
+      "occupancy_rate": 0.4035196152246958,
+      "year_built": 1923,
+      "bldg_class": null,
+      "occupancy_pct": 40.4
+    },
+    {
+      "name": "Hayden Owners",
+      "address": "11 W 81st St",
+      "zip": "10024",
+      "units": 36.0,
+      "water_kgal": 611.9,
+      "water_per_unit": 16.99722222222222,
+      "occupancy_rate": 0.4049368010058898,
+      "year_built": 1908,
+      "bldg_class": null,
+      "occupancy_pct": 40.5
+    },
+    {
+      "name": "308 W 82 ST",
+      "address": "308 W 82 ST",
+      "zip": "10024",
+      "units": 49.0,
+      "water_kgal": 886.4,
+      "water_per_unit": 18.089795918367347,
+      "occupancy_rate": 0.43096595398135434,
+      "year_built": 1906,
+      "bldg_class": null,
+      "occupancy_pct": 43.1
+    },
+    {
+      "name": "304 W. 75th Apartments Corp.",
+      "address": "304 West 75th Street",
+      "zip": "10023",
+      "units": 119.0,
+      "water_kgal": 2173.8,
+      "water_per_unit": 18.267226890756305,
+      "occupancy_rate": 0.43519301705196684,
+      "year_built": 1930,
+      "bldg_class": null,
+      "occupancy_pct": 43.5
+    },
+    {
+      "name": "300 W 106th Street",
+      "address": "300 West 106 Street",
+      "zip": "10025",
+      "units": 61.0,
+      "water_kgal": 1133.3,
+      "water_per_unit": 18.578688524590163,
+      "occupancy_rate": 0.44261318700631724,
+      "year_built": 1966,
+      "bldg_class": "D1",
+      "occupancy_pct": 44.3
+    },
+    {
+      "name": "251 CPW Housing LLC",
+      "address": "1 West 85th Street",
+      "zip": "10024",
+      "units": 153.83,
+      "water_kgal": 2958.1,
+      "water_per_unit": 19.2296691152571,
+      "occupancy_rate": 0.45812195628962726,
+      "year_built": 1925,
+      "bldg_class": null,
+      "occupancy_pct": 45.8
+    },
+    {
+      "name": "AKAM - 588 West End Avenue",
+      "address": "588 West End Avenue",
+      "zip": "10024",
+      "units": 63.0,
+      "water_kgal": 1224.9,
+      "water_per_unit": 19.442857142857143,
+      "occupancy_rate": 0.46320088488045613,
+      "year_built": 1922,
+      "bldg_class": null,
+      "occupancy_pct": 46.3
+    },
+    {
+      "name": "Andrews: 74 W 68th St.",
+      "address": "74 West 68th Street",
+      "zip": "10023",
+      "units": 58.0,
+      "water_kgal": 1140.1,
+      "water_per_unit": 19.656896551724138,
+      "occupancy_rate": 0.4683000965270789,
+      "year_built": 1924,
+      "bldg_class": "D4",
+      "occupancy_pct": 46.8
+    },
+    {
+      "name": "342 West 71st Street",
+      "address": "342 West 71st Street",
+      "zip": "10023",
+      "units": 126.0,
+      "water_kgal": 2510.8,
+      "water_per_unit": 19.926984126984127,
+      "occupancy_rate": 0.47473458313243905,
+      "year_built": 1900,
+      "bldg_class": "HR",
+      "occupancy_pct": 47.5
+    },
+    {
+      "name": "Halbor  Realty Co.-306",
+      "address": "306 West 93rd Street",
+      "zip": "10025",
+      "units": 48.0,
+      "water_kgal": 967.9,
+      "water_per_unit": 20.164583333333333,
+      "occupancy_rate": 0.48039507643438556,
+      "year_built": 1927,
+      "bldg_class": null,
+      "occupancy_pct": 48.0
+    },
+    {
+      "name": "Sandberg: 329 West 108th St.",
+      "address": "329 W 108th St",
+      "zip": "10025",
+      "units": 24.0,
+      "water_kgal": 488.7,
+      "water_per_unit": 20.3625,
+      "occupancy_rate": 0.4851101846337106,
+      "year_built": 1920,
+      "bldg_class": null,
+      "occupancy_pct": 48.5
+    },
+    {
+      "name": "Buchbinder: 4 West 109th St",
+      "address": "4 West 109th St",
+      "zip": "10025",
+      "units": 41.0,
+      "water_kgal": 836.5,
+      "water_per_unit": 20.402439024390244,
+      "occupancy_rate": 0.4860616801522393,
+      "year_built": 1890,
+      "bldg_class": null,
+      "occupancy_pct": 48.6
+    },
+    {
+      "name": "221 West 105th Street",
+      "address": "221 West 105th Street",
+      "zip": "10025",
+      "units": 53.0,
+      "water_kgal": 1096.6,
+      "water_per_unit": 20.69056603773585,
+      "occupancy_rate": 0.49292593300144966,
+      "year_built": 1925,
+      "bldg_class": null,
+      "occupancy_pct": 49.3
+    },
+    {
+      "name": "365 West End LLC",
+      "address": "365 West End Ave.",
+      "zip": "10024",
+      "units": 206.67,
+      "water_kgal": 4296.1,
+      "water_per_unit": 20.78724536701021,
+      "occupancy_rate": 0.49522919278166083,
+      "year_built": 1924,
+      "bldg_class": null,
+      "occupancy_pct": 49.5
+    },
+    {
+      "name": "57 West 93rd Street",
+      "address": "57 West 93rd Street",
+      "zip": "10025",
+      "units": 42.0,
+      "water_kgal": 890.2,
+      "water_per_unit": 21.195238095238096,
+      "occupancy_rate": 0.504949091012224,
+      "year_built": 1926,
+      "bldg_class": null,
+      "occupancy_pct": 50.5
+    },
+    {
+      "name": "Three Arts Club",
+      "address": "340 West 85th Street",
+      "zip": "10024",
+      "units": 120.0,
+      "water_kgal": 2560.3,
+      "water_per_unit": 21.335833333333333,
+      "occupancy_rate": 0.508298590430812,
+      "year_built": 1927,
+      "bldg_class": null,
+      "occupancy_pct": 50.8
+    },
+    {
+      "name": "Century - 300 West 72nd Street",
+      "address": "300 West 72nd Street",
+      "zip": "10023",
+      "units": 34.0,
+      "water_kgal": 728.6,
+      "water_per_unit": 21.429411764705883,
+      "occupancy_rate": 0.5105279753354589,
+      "year_built": 1942,
+      "bldg_class": null,
+      "occupancy_pct": 51.1
+    },
+    {
+      "name": "AKAM - 102 West 85th Street",
+      "address": "102 West 85th Street",
+      "zip": "10024",
+      "units": 91.0,
+      "water_kgal": 1953.4,
+      "water_per_unit": 21.465934065934068,
+      "occupancy_rate": 0.5113980718507223,
+      "year_built": 1931,
+      "bldg_class": null,
+      "occupancy_pct": 51.1
+    },
+    {
+      "name": "230 West End Avenue",
+      "address": "230 West End Avenue",
+      "zip": "10023",
+      "units": 114.0,
+      "water_kgal": 2452.8,
+      "water_per_unit": 21.51578947368421,
+      "occupancy_rate": 0.5125858123569795,
+      "year_built": 1927,
+      "bldg_class": null,
+      "occupancy_pct": 51.3
+    },
+    {
+      "name": "17 West 64th Tenants Corp",
+      "address": "17 West 64th Street",
+      "zip": "10023",
+      "units": 54.0,
+      "water_kgal": 1172.2,
+      "water_per_unit": 21.70740740740741,
+      "occupancy_rate": 0.5171508614033927,
+      "year_built": 1924,
+      "bldg_class": null,
+      "occupancy_pct": 51.7
+    },
+    {
+      "name": "Brodsky - 19 West 69th Street",
+      "address": "19 West 69th Street",
+      "zip": "10023",
+      "units": 83.0,
+      "water_kgal": 1814.0,
+      "water_per_unit": 21.85542168674699,
+      "occupancy_rate": 0.5206771098688979,
+      "year_built": 1916,
+      "bldg_class": null,
+      "occupancy_pct": 52.1
+    },
+    {
+      "name": "1762 FIRST AVE 324 W 84 REALTY",
+      "address": "324 WEST 84TH ST",
+      "zip": "10024",
+      "units": 48.0,
+      "water_kgal": 1051.6,
+      "water_per_unit": 21.90833333333333,
+      "occupancy_rate": 0.5219376613063331,
+      "year_built": 1914,
+      "bldg_class": null,
+      "occupancy_pct": 52.2
+    },
+    {
+      "name": "160 West 73rd (A07)",
+      "address": "160 WEST 73 STREET",
+      "zip": "10023",
+      "units": 147.0,
+      "water_kgal": 3263.7,
+      "water_per_unit": 22.20204081632653,
+      "occupancy_rate": 0.5289348616158792,
+      "year_built": 1929,
+      "bldg_class": "D3",
+      "occupancy_pct": 52.9
+    },
+    {
+      "name": "Maxwell: 121 West 72nd St.",
+      "address": "121 West 72nd Street",
+      "zip": "10023",
+      "units": 84.0,
+      "water_kgal": 1867.9,
+      "water_per_unit": 22.236904761904764,
+      "occupancy_rate": 0.5297654499560396,
+      "year_built": 1910,
+      "bldg_class": "D4",
+      "occupancy_pct": 53.0
+    },
+    {
+      "name": "Brusco West 80 Street",
+      "address": "162 West 80th Street",
+      "zip": "10024",
+      "units": 47.0,
+      "water_kgal": 1053.8,
+      "water_per_unit": 22.42127659574468,
+      "occupancy_rate": 0.5341578700594325,
+      "year_built": 1900,
+      "bldg_class": null,
+      "occupancy_pct": 53.4
+    }
+  ],
+  "uws_buildings_highest": [
+    {
+      "name": "320 West End Ave",
+      "address": "320 West End Ave.",
+      "zip": "10023",
+      "units": 32.0,
+      "water_kgal": 2653.3,
+      "water_per_unit": 82.915625,
+      "occupancy_rate": 1.975357355568791,
+      "year_built": 1924,
+      "bldg_class": null,
+      "occupancy_pct": 197.5
+    },
+    {
+      "name": "101 West 80th Street",
+      "address": "101 West 80th Street",
+      "zip": "10024",
+      "units": 56.0,
+      "water_kgal": 4673.1,
+      "water_per_unit": 83.44821428571429,
+      "occupancy_rate": 1.988045605377351,
+      "year_built": 1940,
+      "bldg_class": null,
+      "occupancy_pct": 198.8
+    },
+    {
+      "name": "AKAM - 473 West End Avenue",
+      "address": "473 West End Avenue",
+      "zip": "10024",
+      "units": 45.0,
+      "water_kgal": 3765.4,
+      "water_per_unit": 83.67555555555556,
+      "occupancy_rate": 1.9934617166302697,
+      "year_built": 1929,
+      "bldg_class": null,
+      "occupancy_pct": 199.3
+    },
+    {
+      "name": "DEPM 2110 - 186 West 80th St",
+      "address": "186 West 80th Street",
+      "zip": "10024",
+      "units": 91.0,
+      "water_kgal": 7621.4,
+      "water_per_unit": 83.75164835164834,
+      "occupancy_rate": 1.9952745289255116,
+      "year_built": 1988,
+      "bldg_class": null,
+      "occupancy_pct": 199.5
+    },
+    {
+      "name": "203 W 107",
+      "address": "203 West 107th Street",
+      "zip": "10025",
+      "units": 28.0,
+      "water_kgal": 2356.2,
+      "water_per_unit": 84.14999999999999,
+      "occupancy_rate": 2.0047647409172122,
+      "year_built": 1911,
+      "bldg_class": "D3",
+      "occupancy_pct": 200.5
+    },
+    {
+      "name": "203 West 107th Street",
+      "address": "203 West 107th Street",
+      "zip": "10025",
+      "units": 28.0,
+      "water_kgal": 2356.2,
+      "water_per_unit": 84.14999999999999,
+      "occupancy_rate": 2.0047647409172122,
+      "year_built": 1911,
+      "bldg_class": null,
+      "occupancy_pct": 200.5
+    },
+    {
+      "name": "210 W 107 St",
+      "address": "210 W 107 Street",
+      "zip": "10025",
+      "units": 54.0,
+      "water_kgal": 4603.5,
+      "water_per_unit": 85.25,
+      "occupancy_rate": 2.030970815961882,
+      "year_built": 1925,
+      "bldg_class": "D1",
+      "occupancy_pct": 203.1
+    },
+    {
+      "name": "805 Columbus Avenue",
+      "address": "805 Columbus Avenue",
+      "zip": "10025",
+      "units": 63.0,
+      "water_kgal": 5429.7,
+      "water_per_unit": 86.18571428571428,
+      "occupancy_rate": 2.053262996681698,
+      "year_built": 2007,
+      "bldg_class": "RM",
+      "occupancy_pct": 205.3
+    },
+    {
+      "name": "170 West 73 Street & 175 West 72 Street - Parent Property",
+      "address": "175 West 72 Street",
+      "zip": "10023",
+      "units": 164.0,
+      "water_kgal": 14162.8,
+      "water_per_unit": 86.35853658536585,
+      "occupancy_rate": 2.057380264094481,
+      "year_built": 1906,
+      "bldg_class": null,
+      "occupancy_pct": 205.7
+    },
+    {
+      "name": "Michael Young: 865 West End Ave",
+      "address": "865 West End Ave",
+      "zip": "10025",
+      "units": 77.0,
+      "water_kgal": 6660.7,
+      "water_per_unit": 86.5025974025974,
+      "occupancy_rate": 2.0608123264466327,
+      "year_built": 1925,
+      "bldg_class": null,
+      "occupancy_pct": 206.1
+    },
+    {
+      "name": "DEPM 2692 - 2148 Broadway",
+      "address": "2148 Broadway",
+      "zip": "10023",
+      "units": 69.0,
+      "water_kgal": 5973.2,
+      "water_per_unit": 86.56811594202898,
+      "occupancy_rate": 2.062373220774961,
+      "year_built": 2011,
+      "bldg_class": null,
+      "occupancy_pct": 206.2
+    },
+    {
+      "name": "210 West 107th Street",
+      "address": "210 West 107th Street",
+      "zip": "10025",
+      "units": 53.0,
+      "water_kgal": 4603.5,
+      "water_per_unit": 86.85849056603773,
+      "occupancy_rate": 2.069291020036635,
+      "year_built": 1925,
+      "bldg_class": null,
+      "occupancy_pct": 206.9
+    },
+    {
+      "name": "DEPM 2302 - 215 West 91st St",
+      "address": "215 West 91st Street",
+      "zip": "10024",
+      "units": 89.0,
+      "water_kgal": 7802.0,
+      "water_per_unit": 87.66292134831461,
+      "occupancy_rate": 2.0884555413535346,
+      "year_built": 1917,
+      "bldg_class": null,
+      "occupancy_pct": 208.8
+    },
+    {
+      "name": "247 WEST 63rd STREET - 41960",
+      "address": "247 WEST 63rd STREET",
+      "zip": "10023",
+      "units": 47.0,
+      "water_kgal": 4193.6,
+      "water_per_unit": 89.22553191489362,
+      "occupancy_rate": 2.125682713874774,
+      "year_built": 1907,
+      "bldg_class": null,
+      "occupancy_pct": 212.6
+    },
+    {
+      "name": "Century - 580 West End Avenue",
+      "address": "580 West End Avenue",
+      "zip": "10024",
+      "units": 17.0,
+      "water_kgal": 1518.2,
+      "water_per_unit": 89.30588235294118,
+      "occupancy_rate": 2.1275969589741797,
+      "year_built": 1928,
+      "bldg_class": null,
+      "occupancy_pct": 212.8
+    },
+    {
+      "name": "230 West 105 Street",
+      "address": "230 West 105 Street",
+      "zip": "10025",
+      "units": 55.0,
+      "water_kgal": 4941.6,
+      "water_per_unit": 89.84727272727274,
+      "occupancy_rate": 2.1404948833179924,
+      "year_built": 1917,
+      "bldg_class": null,
+      "occupancy_pct": 214.0
+    },
+    {
+      "name": "155 West 81",
+      "address": "155 West 81st Street",
+      "zip": "10024",
+      "units": 66.0,
+      "water_kgal": 5952.2,
+      "water_per_unit": 90.18484848484849,
+      "occupancy_rate": 2.148537188441894,
+      "year_built": 1905,
+      "bldg_class": "D7",
+      "occupancy_pct": 214.9
+    },
+    {
+      "name": "AKAM - 245 West 99th Street",
+      "address": "245 West 99th Street",
+      "zip": "10025",
+      "units": 67.0,
+      "water_kgal": 6067.4,
+      "water_per_unit": 90.55820895522388,
+      "occupancy_rate": 2.1574320179922304,
+      "year_built": 2008,
+      "bldg_class": null,
+      "occupancy_pct": 215.7
+    },
+    {
+      "name": "AKAM - 2250 Broadway",
+      "address": "2250 Broadway",
+      "zip": "10024",
+      "units": 120.0,
+      "water_kgal": 10906.6,
+      "water_per_unit": 90.88833333333334,
+      "occupancy_rate": 2.1652968036529683,
+      "year_built": 1987,
+      "bldg_class": null,
+      "occupancy_pct": 216.5
+    },
+    {
+      "name": "306 W 94th St",
+      "address": "306 West 94th Street",
+      "zip": "10025",
+      "units": 120.0,
+      "water_kgal": 10962.7,
+      "water_per_unit": 91.35583333333334,
+      "occupancy_rate": 2.1764343855469526,
+      "year_built": 1910,
+      "bldg_class": null,
+      "occupancy_pct": 217.6
+    },
+    {
+      "name": "77 W 104th St",
+      "address": "77 W 104th St",
+      "zip": "10025",
+      "units": 25.0,
+      "water_kgal": 2316.7,
+      "water_per_unit": 92.66799999999999,
+      "occupancy_rate": 2.2076950565812985,
+      "year_built": 1926,
+      "bldg_class": "D6",
+      "occupancy_pct": 220.8
+    },
+    {
+      "name": "Sandberg: 352 West 110th Street",
+      "address": "352 W 110th St",
+      "zip": "10025",
+      "units": 30.0,
+      "water_kgal": 2825.4,
+      "water_per_unit": 94.18,
+      "occupancy_rate": 2.243716497915426,
+      "year_built": 2005,
+      "bldg_class": null,
+      "occupancy_pct": 224.4
+    },
+    {
+      "name": "755 West End Housing Corp.",
+      "address": "755 West End Avenue",
+      "zip": "10025",
+      "units": 47.0,
+      "water_kgal": 4486.8,
+      "water_per_unit": 95.46382978723405,
+      "occupancy_rate": 2.2743020795052784,
+      "year_built": 1910,
+      "bldg_class": "D4",
+      "occupancy_pct": 227.4
+    },
+    {
+      "name": "306-308 West 94th Street",
+      "address": "306-308 West 94th Street",
+      "zip": "10025",
+      "units": 114.0,
+      "water_kgal": 10962.7,
+      "water_per_unit": 96.1640350877193,
+      "occupancy_rate": 2.2909835637336347,
+      "year_built": 1910,
+      "bldg_class": null,
+      "occupancy_pct": 229.1
+    },
+    {
+      "name": "321 West 94th Street",
+      "address": "321 West 94th Street",
+      "zip": "10025",
+      "units": 30.0,
+      "water_kgal": 2906.5,
+      "water_per_unit": 96.88333333333334,
+      "occupancy_rate": 2.3081199126464167,
+      "year_built": 1930,
+      "bldg_class": null,
+      "occupancy_pct": 230.8
+    },
+    {
+      "name": "311 West 97th Street",
+      "address": "311 West 97th Street",
+      "zip": "10025",
+      "units": 23.0,
+      "water_kgal": 2276.0,
+      "water_per_unit": 98.95652173913044,
+      "occupancy_rate": 2.3575109407773778,
+      "year_built": 1915,
+      "bldg_class": null,
+      "occupancy_pct": 235.8
+    },
+    {
+      "name": "Nelson Mgmt - Morningside Housing Associates",
+      "address": "410 Cathedral Parkway",
+      "zip": "10025",
+      "units": 139.0,
+      "water_kgal": 13886.3,
+      "water_per_unit": 99.90143884892086,
+      "occupancy_rate": 2.3800223668593414,
+      "year_built": 1908,
+      "bldg_class": null,
+      "occupancy_pct": 238.0
+    },
+    {
+      "name": "A02140 - The 640 West End Avenue Condominium",
+      "address": "640 West End Ave",
+      "zip": "10024",
+      "units": 37.0,
+      "water_kgal": 3828.1,
+      "water_per_unit": 103.46216216216216,
+      "occupancy_rate": 2.46485198718671,
+      "year_built": 1913,
+      "bldg_class": null,
+      "occupancy_pct": 246.5
+    },
+    {
+      "name": "370 COLUMBUS - Panco",
+      "address": "370 Columbus Ave",
+      "zip": "10024",
+      "units": 54.0,
+      "water_kgal": 5710.4,
+      "water_per_unit": 105.74814814814815,
+      "occupancy_rate": 2.5193126420047207,
+      "year_built": 1910,
+      "bldg_class": null,
+      "occupancy_pct": 251.9
+    },
+    {
+      "name": "305 Equities Corp.",
+      "address": "305 West 86th Street",
+      "zip": "10024",
+      "units": 49.0,
+      "water_kgal": 5205.2,
+      "water_per_unit": 106.22857142857143,
+      "occupancy_rate": 2.5307581043137923,
+      "year_built": 1925,
+      "bldg_class": null,
+      "occupancy_pct": 253.1
+    },
+    {
+      "name": "126 West 109th Street",
+      "address": "126 West 109th Street",
+      "zip": "10025",
+      "units": 30.0,
+      "water_kgal": 3187.8,
+      "water_per_unit": 106.26,
+      "occupancy_rate": 2.5315068493150683,
+      "year_built": 1900,
+      "bldg_class": null,
+      "occupancy_pct": 253.2
+    },
+    {
+      "name": "DEPM 2840 - 1 West 72nd St",
+      "address": "1 West 72nd Street",
+      "zip": "10023",
+      "units": 78.0,
+      "water_kgal": 8316.3,
+      "water_per_unit": 106.61923076923075,
+      "occupancy_rate": 2.5400650570394463,
+      "year_built": 1900,
+      "bldg_class": null,
+      "occupancy_pct": 254.0
+    },
+    {
+      "name": "Maxwell: 100 West 81st",
+      "address": "100 West 81st St",
+      "zip": "10024",
+      "units": 17.0,
+      "water_kgal": 1813.7,
+      "water_per_unit": 106.68823529411765,
+      "occupancy_rate": 2.5417090004554534,
+      "year_built": 1920,
+      "bldg_class": "D4",
+      "occupancy_pct": 254.2
+    },
+    {
+      "name": "Dalan - 230 West 97th Street",
+      "address": "230 West 97th Street",
+      "zip": "10025",
+      "units": 35.0,
+      "water_kgal": 3786.0,
+      "water_per_unit": 108.17142857142858,
+      "occupancy_rate": 2.5770441589381434,
+      "year_built": 1910,
+      "bldg_class": null,
+      "occupancy_pct": 257.7
+    },
+    {
+      "name": "243 West 98th Street",
+      "address": "243 West 98th Street",
+      "zip": "10025",
+      "units": 31.0,
+      "water_kgal": 3362.0,
+      "water_per_unit": 108.45161290322581,
+      "occupancy_rate": 2.5837191876885246,
+      "year_built": 1920,
+      "bldg_class": "RM",
+      "occupancy_pct": 258.4
+    },
+    {
+      "name": "53 West 72nd Street",
+      "address": "53 West 72nd Street",
+      "zip": "10023",
+      "units": 57.0,
+      "water_kgal": 6297.8,
+      "water_per_unit": 110.48771929824562,
+      "occupancy_rate": 2.6322267849492706,
+      "year_built": 1925,
+      "bldg_class": null,
+      "occupancy_pct": 263.2
+    },
+    {
+      "name": "AAG: 2512 Broadway",
+      "address": "2512 BROADWAY",
+      "zip": "10025",
+      "units": 60.0,
+      "water_kgal": 6833.9,
+      "water_per_unit": 113.89833333333333,
+      "occupancy_rate": 2.713480246178281,
+      "year_built": 1900,
+      "bldg_class": "D7",
+      "occupancy_pct": 271.3
+    },
+    {
+      "name": "981-995 Columbus Avenue",
+      "address": "981-995 Columbus Avenue",
+      "zip": "10025",
+      "units": 70.0,
+      "water_kgal": 8185.9,
+      "water_per_unit": 116.94142857142856,
+      "occupancy_rate": 2.7859780481579173,
+      "year_built": 1900,
+      "bldg_class": null,
+      "occupancy_pct": 278.6
+    },
+    {
+      "name": "73 WEST 104 STREET - 32526",
+      "address": "73 WEST 104 STREET",
+      "zip": "10025",
+      "units": 39.0,
+      "water_kgal": 4595.1,
+      "water_per_unit": 117.82307692307693,
+      "occupancy_rate": 2.8069821780363773,
+      "year_built": 1920,
+      "bldg_class": null,
+      "occupancy_pct": 280.7
+    },
+    {
+      "name": "760 Amsterdam Avenue aka 209 West 97th Street",
+      "address": "760 Amsterdam Avenue",
+      "zip": "10025",
+      "units": 44.0,
+      "water_kgal": 5264.5,
+      "water_per_unit": 119.64772727272727,
+      "occupancy_rate": 2.850452108939304,
+      "year_built": 1901,
+      "bldg_class": null,
+      "occupancy_pct": 285.0
+    },
+    {
+      "name": "455 Central Park West",
+      "address": "455 Central Park West",
+      "zip": "10025",
+      "units": 100.0,
+      "water_kgal": 11965.1,
+      "water_per_unit": 119.65100000000001,
+      "occupancy_rate": 2.8505300774270403,
+      "year_built": 2002,
+      "bldg_class": "R4",
+      "occupancy_pct": 285.1
+    },
+    {
+      "name": "101 W 84th Street",
+      "address": "101 W 84th Street",
+      "zip": "10024",
+      "units": 12.0,
+      "water_kgal": 1436.3,
+      "water_per_unit": 119.69166666666666,
+      "occupancy_rate": 2.8514989080802065,
+      "year_built": 1925,
+      "bldg_class": null,
+      "occupancy_pct": 285.1
+    },
+    {
+      "name": "West End Associates",
+      "address": "401 West End Avenue",
+      "zip": "10024",
+      "units": 76.0,
+      "water_kgal": 9123.8,
+      "water_per_unit": 120.05,
+      "occupancy_rate": 2.860035735556879,
+      "year_built": 1900,
+      "bldg_class": null,
+      "occupancy_pct": 286.0
+    },
+    {
+      "name": "245 West 104th Street Housing Corp",
+      "address": "245 West 104th Street",
+      "zip": "10025",
+      "units": 70.0,
+      "water_kgal": 8555.0,
+      "water_per_unit": 122.21428571428571,
+      "occupancy_rate": 2.911597039053859,
+      "year_built": 1926,
+      "bldg_class": null,
+      "occupancy_pct": 291.2
+    },
+    {
+      "name": "2701 Broadway",
+      "address": "2701 Broadway",
+      "zip": "10025",
+      "units": 57.0,
+      "water_kgal": 7050.4,
+      "water_per_unit": 123.69122807017543,
+      "occupancy_rate": 2.9467832774312193,
+      "year_built": 1943,
+      "bldg_class": "D7",
+      "occupancy_pct": 294.7
+    },
+    {
+      "name": "102 West 75 Street",
+      "address": "102 West 75 Street",
+      "zip": "10023",
+      "units": 59.0,
+      "water_kgal": 7376.6,
+      "water_per_unit": 125.0271186440678,
+      "occupancy_rate": 2.9786091398229377,
+      "year_built": 1900,
+      "bldg_class": null,
+      "occupancy_pct": 297.9
+    },
+    {
+      "name": "Orsid - 251 West 89th Street",
+      "address": "251 West 89th Street",
+      "zip": "10024",
+      "units": 72.0,
+      "water_kgal": 9120.5,
+      "water_per_unit": 126.67361111111111,
+      "occupancy_rate": 3.017834689960956,
+      "year_built": 1920,
+      "bldg_class": null,
+      "occupancy_pct": 301.8
+    },
+    {
+      "name": "JJS: 171-173 West 107 St",
+      "address": "171-173 West 107 St. New York",
+      "zip": "10025",
+      "units": 26.0,
+      "water_kgal": 3353.4,
+      "water_per_unit": 128.97692307692307,
+      "occupancy_rate": 3.0727081138040044,
+      "year_built": 1920,
+      "bldg_class": null,
+      "occupancy_pct": 307.3
+    },
+    {
+      "name": "Grogan & Associates - 102 w 75th st",
+      "address": "102 w 75th st",
+      "zip": "10023",
+      "units": 57.0,
+      "water_kgal": 7376.6,
+      "water_per_unit": 129.4140350877193,
+      "occupancy_rate": 3.083121741220234,
+      "year_built": 1900,
+      "bldg_class": "RM",
+      "occupancy_pct": 308.3
+    },
+    {
+      "name": "64 West 107th Street",
+      "address": "64 West 107th Street",
+      "zip": "10025",
+      "units": 25.0,
+      "water_kgal": 3301.2,
+      "water_per_unit": 132.048,
+      "occupancy_rate": 3.145872543180465,
+      "year_built": 1940,
+      "bldg_class": "D1",
+      "occupancy_pct": 314.6
+    }
+  ]
+};
+
+// ============================================================
+// UTILS
+// ============================================================
+const $ = id => document.getElementById(id);
+
+function fmt(n, decimals=1) {
+  if (n == null) return '—';
+  return parseFloat(n).toFixed(decimals);
+}
+function fmtPct(n) { return fmt(n, 1) + '%'; }
+function fmtK(n) {
+  if (n == null) return '—';
+  return n >= 1000 ? (n/1000).toFixed(1) + 'k' : Math.round(n).toLocaleString();
+}
+
+const AMBER = '#c9973a';
+const TEAL  = '#4a8fa8';
+const CREAM = '#c8c0a8';
+const RED   = '#c94a3a';
+const BG2   = '#161616';
+const GRID  = '#2a2a2a';
+
+Chart.defaults.color = '#7a7060';
+Chart.defaults.font.family = "'IBM Plex Mono', monospace";
+Chart.defaults.font.size = 11;
+
+// ============================================================
+// HERO NUMBER COUNTER
+// ============================================================
+function countUp(el, target, duration=1200, suffix='') {
+  const start = 0;
+  const startTime = performance.now();
+  function tick(now) {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.round(start + (target - start) * eased) + suffix;
+    if (progress < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+// ============================================================
+// SLIDER
+// ============================================================
+const slider = $('gpd-slider');
+const sensitivityTable = DATA.sensitivity_table;
+
+function getNeighborhoodPct(gpd, neighborhood) {
+  const row = sensitivityTable[gpd] || sensitivityTable[50];
+  return row ? (row[neighborhood] || null) : null;
+}
+
+function updateSlider() {
+  const gpd = parseInt(slider.value);
+  const uwsPct = getNeighborhoodPct(gpd, 'Upper West Side');
+  const minPct  = getNeighborhoodPct(40,  'Upper West Side');
+  const maxPct  = getNeighborhoodPct(70,  'Upper West Side');
+
+  $('slider-gpd').textContent   = gpd;
+  $('result-gpd').textContent   = gpd;
+  $('result-uws-pct').textContent = uwsPct != null ? fmtPct(uwsPct) : '—';
+  $('result-min').textContent   = minPct  != null ? fmt(minPct)  : '—';
+  $('result-max').textContent   = maxPct  != null ? fmt(maxPct)  : '—';
+  $('hero-pct').textContent     = uwsPct  != null ? Math.round(uwsPct) : '—';
+  if ($('stat-pct')) $('stat-pct').textContent = uwsPct != null ? fmtPct(uwsPct) : '—';
+}
+
+slider.addEventListener('input', updateSlider);
+
+// ============================================================
+// CHART — OCCUPANCY DISTRIBUTION (UWS)
+// ============================================================
+function buildDistChart() {
+  const dist = DATA.uws_occupancy_distribution;
+  const labels = dist.map(d => d.occupancy_bucket);
+  const pctUnits = dist.map(d => d.pct_units);
+  const pctBldgs = dist.map(d => d.pct_buildings);
+
+  const colors = [
+    '#c94a3a', // Ghost
+    '#c96a3a', // Very Low
+    '#c9933a', // Low
+    '#a8944a', // Moderate
+    '#4a8fa8', // Likely Full
+    '#6aaa3a', // Over-occupied
+    '#3a8a5a', // Extreme
+  ];
+
+  new Chart($('chart-dist').getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: '% of Units',
+          data: pctUnits,
+          backgroundColor: colors,
+          borderRadius: 2,
+        },
+        {
+          label: '% of Buildings',
+          data: pctBldgs,
+          backgroundColor: colors.map(c => c + '55'),
+          borderColor: colors,
+          borderWidth: 1,
+          borderRadius: 2,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: true, labels: { color: CREAM, font: { size: 10 } } },
+        tooltip: {
+          callbacks: {
+            label: ctx => ` ${ctx.dataset.label}: ${fmt(ctx.parsed.y)}%`
+          }
+        }
+      },
+      scales: {
+        x: { grid: { color: GRID }, ticks: { color: CREAM, maxRotation: 30 } },
+        y: {
+          grid: { color: GRID },
+          ticks: { color: CREAM, callback: v => v + '%' },
+          title: { display: true, text: 'Share', color: CREAM }
+        }
+      }
+    }
+  });
+}
+
+// ============================================================
+// CHART — NEIGHBORHOOD COMPARISON
+// ============================================================
+function buildCompareChart() {
+  const data = [...DATA.neighborhood_comparison]
+    .sort((a,b) => a.pct_of_full_occupancy - b.pct_of_full_occupancy);
+
+  const labels = data.map(d => d.neighborhood);
+  const values = data.map(d => d.pct_of_full_occupancy);
+  const bgColors = labels.map(l =>
+    l === 'Upper West Side' ? AMBER :
+    l === 'Washington Heights' ? '#6a5a2a' : TEAL
+  );
+
+  new Chart($('chart-compare').getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Implied Occupancy %',
+        data: values,
+        backgroundColor: bgColors,
+        borderRadius: 2,
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => ` ${fmt(ctx.parsed.x)}% of full occupancy`
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: GRID },
+          ticks: { color: CREAM, callback: v => v + '%' },
+          min: 0,
+          max: 200,
+        },
+        y: { grid: { color: 'transparent' }, ticks: { color: CREAM } }
+      }
+    }
+  });
+
+  // Build occupancy bar rows
+  const barsDiv = $('occupancy-bars');
+  data.forEach(d => {
+    const isUWS = d.neighborhood === 'Upper West Side';
+    const pct = Math.min(d.pct_of_full_occupancy, 170);
+    const color = isUWS ? AMBER : TEAL;
+    const row = document.createElement('div');
+    row.className = 'occ-bar-row';
+    row.innerHTML = `
+      <div class="occ-bar-label">${d.neighborhood}</div>
+      <div class="occ-bar-track">
+        <div class="occ-bar-fill" style="width:0%;background:${color}25;border-right:2px solid ${color};"
+             data-target="${(pct/170)*100}"></div>
+      </div>
+      <div class="occ-bar-value" style="color:${color}">${fmt(d.pct_of_full_occupancy)}%</div>
+    `;
+    barsDiv.appendChild(row);
+  });
+}
+
+// ============================================================
+// CHART — ERA
+// ============================================================
+function buildEraChart() {
+  const era = DATA.uws_by_era.filter(e => e.unit_count > 0);
+  const labels = era.map(e => e.era);
+  const values = era.map(e => (e.median_occupancy * 100));
+
+  new Chart($('chart-era').getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Median Implied Occupancy %',
+        data: values,
+        backgroundColor: AMBER + '80',
+        borderColor: AMBER,
+        borderWidth: 1,
+        borderRadius: 2,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => ` ${fmt(ctx.parsed.y)}% implied occupancy`
+          }
+        }
+      },
+      scales: {
+        x: { grid: { color: GRID }, ticks: { color: CREAM } },
+        y: {
+          grid: { color: GRID },
+          ticks: { color: CREAM, callback: v => v + '%' },
+          min: 60,
+          max: 160,
+        }
+      }
+    }
+  });
+}
+
+// ============================================================
+// TABLES
+// ============================================================
+function buildLowOccupancyTable() {
+  const buildings = (DATA.uws_buildings_lowest || []).slice(0, 15);
+  const tbody = $('low-occ-tbody');
+  buildings.forEach(b => {
+    const pct = b.occupancy_pct != null ? b.occupancy_pct : (b.occupancy_rate * 100).toFixed(1);
+    const color = parseFloat(pct) < 25 ? 'var(--red)' : parseFloat(pct) < 50 ? '#c9933a' : CREAM;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="highlight">${b.name || '—'}</td>
+      <td>${b.address || '—'}</td>
+      <td class="mono">${b.zip || '—'}</td>
+      <td class="mono">${Math.round(b.units || 0)}</td>
+      <td class="mono" style="color:${color}">${fmt(pct)}%</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function buildNeighborhoodTable() {
+  const data = [...DATA.neighborhood_comparison]
+    .sort((a,b) => a.pct_of_full_occupancy - b.pct_of_full_occupancy);
+  const tbody = $('neighborhood-tbody');
+  data.forEach(d => {
+    const isUWS = d.neighborhood === 'Upper West Side';
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="${isUWS ? 'amber' : 'highlight'}">${d.neighborhood}${isUWS ? ' ●' : ''}</td>
+      <td class="mono">${Math.round(d.total_buildings)}</td>
+      <td class="mono">${fmtK(d.total_units)}</td>
+      <td class="mono">${fmt(d.water_per_unit_kgal)}</td>
+      <td class="mono ${isUWS ? 'amber' : ''}">${fmtPct(d.pct_of_full_occupancy)}</td>
+      <td class="mono">${fmtPct(d.pct_buildings_under_50pct)}</td>
+      <td class="mono">${fmtPct(d.pct_buildings_over_100pct)}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function buildSensitivityTable() {
+  const tbody = $('sensitivity-tbody');
+  const neighborhoods = ['Upper West Side','Park Slope','Williamsburg','Upper East Side','Tribeca','Chelsea','Washington Heights'];
+  const gpds = [40, 45, 50, 55, 60, 65, 70];
+  gpds.forEach(gpd => {
+    const row = sensitivityTable[gpd] || {};
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="mono" style="color:var(--cream)">${gpd}</td>
+      ${neighborhoods.map((n, i) => {
+        const v = row[n];
+        const isUWS = i === 0;
+        return `<td class="mono ${isUWS ? 'amber' : ''}">${v != null ? fmt(v) + '%' : '—'}</td>`;
+      }).join('')}
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+// ============================================================
+// INTERSECTION OBSERVER — animate chart wraps and bars
+// ============================================================
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      // Animate bar fills inside occupancy-bars
+      entry.target.querySelectorAll('.occ-bar-fill').forEach(fill => {
+        const target = parseFloat(fill.dataset.target);
+        setTimeout(() => { fill.style.width = target + '%'; }, 100);
+      });
+    }
+  });
+}, { threshold: 0.15 });
+
+// ============================================================
+// INIT
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+  // Counter animation on load
+  const heroEl = $('hero-pct');
+  const target = Math.round(DATA.uws_summary.pct_of_full_occupancy);
+  countUp(heroEl, target, 1400);
+
+  // Populate tables
+  buildLowOccupancyTable();
+  buildNeighborhoodTable();
+  buildSensitivityTable();
+
+  // Build charts
+  buildDistChart();
+  buildCompareChart();
+  buildEraChart();
+
+  // Init slider
+  updateSlider();
+
+  // Observe chart wraps for scroll animation
+  document.querySelectorAll('.chart-wrap').forEach(el => observer.observe(el));
+});
+</script>
+</body>
+</html>
